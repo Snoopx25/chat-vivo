@@ -1104,20 +1104,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 /* ===================== dados de exemplo (mock) ===================== */
-const CHATS = [
-  { name:'Marina Costa', initial:'M', color:'#3EE8D8', online:true, last:'AMEI ISSO!! 🎉', time:'14:32', unread:2, group:'Hoje' },
-  { name:'Lucas Andrade', initial:'L', color:'#FF9EC7', online:true, last:'kkkkkk parei', time:'13:10', unread:0, group:'Hoje' },
-  { name:'Grupo Devs 🔥', initial:'D', color:'#FFD93D', online:false, last:'Fulano: bora testar hoje?', time:'ontem', unread:5, group:'Anteriores' },
-  { name:'Bia Fernandes', initial:'B', color:'#B98CFF', online:false, last:'te mando o link', time:'ontem', unread:0, group:'Anteriores' },
-  { name:'Rafa Souza', initial:'R', color:'#7ED9A0', online:true, last:'❤️', time:'seg', unread:0, group:'Anteriores' },
-];
-const CONTACTS = [
-  { name:'Bia Fernandes', initial:'B', color:'#B98CFF', online:false, status:'Visto por último há 2h' },
-  { name:'Grupo Devs 🔥', initial:'D', color:'#FFD93D', online:false, status:'6 participantes' },
-  { name:'Lucas Andrade', initial:'L', color:'#FF9EC7', online:true, status:'Online agora' },
-  { name:'Marina Costa', initial:'M', color:'#3EE8D8', online:true, status:'Online agora' },
-  { name:'Rafa Souza', initial:'R', color:'#7ED9A0', online:true, status:'Online agora' },
-];
+const BOT_CONTACT = { name:'Vivo', initial:'V', color:'#FF4FA0', online:true, last:'Oi! Manda uma mensagem pra gente testar de verdade 👋', time:'agora', unread:0, group:'Hoje', status:'assistente do Chat Vivo · sempre online', isBot:true };
+const CHATS = [BOT_CONTACT];
+const CONTACTS = [BOT_CONTACT];
 
 function moodDotColor(text){
   const r = pickReaction(text);
@@ -1221,6 +1210,7 @@ document.getElementById('authSubmitBtn').onclick = () => {
 
   // sem chamada de rede — só guarda em memória e libera o app
   const displayName = name || email.split('@')[0];
+  currentUserName = displayName;
   document.getElementById('profileNameDisplay').textContent = displayName;
   document.getElementById('profileStatusDisplay').textContent = 'Testando o Chat Vivo por aqui 🧪';
 
@@ -1391,11 +1381,101 @@ function applyMsgReaction(bubble, recipe){
 const chatThread = document.getElementById('chatThread');
 const chatMsgInput = document.getElementById('chatMsgInput');
 let activeContact = null;
+let currentUserName = 'você';
 
-const CANNED_REPLIES = [
-  'kkkkk verdade', 'com certeza! 🔥', 'ai que fofo ❤️', 'não acredito 😱',
-  'concordo total', 'depois te conto direito', 'bora combinar algo 🎉', 'entendi, faz sentido'
-];
+/* ==========================================================================
+   MOTOR DO BOT "VIVO" — interpreta a mensagem de verdade (saudação, pergunta,
+   despedida, agradecimento, humor do emoji) em vez de sortear frase solta.
+   Não é uma IA generativa — é regra + contexto, mas responde de acordo com
+   o que você escreveu, o que já basta pra testar a experiência real do chat.
+   ========================================================================== */
+const lastBotReplies = []; // evita repetir a mesma resposta em sequência
+
+function pickVaried(list){
+  let choice;
+  let tries = 0;
+  do { choice = list[Math.floor(Math.random() * list.length)]; tries++; }
+  while (lastBotReplies.includes(choice) && tries < 8);
+  lastBotReplies.push(choice);
+  if (lastBotReplies.length > 3) lastBotReplies.shift();
+  return choice;
+}
+
+function timeOfDayGreeting(){
+  const h = new Date().getHours();
+  if (h < 6) return 'boa madrugada';
+  if (h < 12) return 'bom dia';
+  if (h < 18) return 'boa tarde';
+  return 'boa noite';
+}
+
+function generateBotReply(userText){
+  const t = userText.toLowerCase().trim();
+
+  // perguntas diretas que dá pra responder de verdade
+  if (/que horas? (são|é)/.test(t)){
+    return 'Agora são ' + new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }) + ' aqui no seu aparelho.';
+  }
+  if (/que dia é hoje|data de hoje/.test(t)){
+    return 'Hoje é ' + new Date().toLocaleDateString('pt-BR', { weekday:'long', day:'numeric', month:'long' }) + '.';
+  }
+  if (/seu nome|quem (é você|te fez|criou você)/.test(t)){
+    return pickVaried(['Sou o Vivo, o assistente de teste do Chat Vivo 🙂', 'Me chamo Vivo — tô aqui só pra você testar o chat de verdade.']);
+  }
+
+  // saudação
+  if (/^(oi+|ol[aá]|e ?a[ií]|opa|salve)\b/.test(t)){
+    return pickVaried([
+      timeOfDayGreeting() + ', ' + currentUserName + '! Tudo certo por aí?',
+      'Oi! Que bom te ver por aqui, ' + currentUserName + '.',
+      timeOfDayGreeting() + '! Como você tá?'
+    ]);
+  }
+
+  // despedida
+  if (/tchau|falou|até (mais|logo|amanhã)|vou nessa|indo dormir/.test(t)){
+    return pickVaried(['Até mais, ' + currentUserName + '! 👋', 'Falou! Volta quando quiser.', 'Tchau! Foi bom testar com você.']);
+  }
+
+  // agradecimento
+  if (/obrigad[oa]|valeu|vlw|agradeço/.test(t)){
+    return pickVaried(['De nada! 😊', 'Imagina, disponha!', 'Sempre que precisar 🙏']);
+  }
+
+  // pergunta genérica (termina com ? ou começa com pergunta clássica)
+  if (/\?$/.test(userText) || /^(quem|o que|oque|como|quando|onde|por ?que|qual|será que)\b/.test(t)){
+    return pickVaried([
+      'Boa pergunta! Ainda não tenho essa resposta pronta, mas tô guardando aqui 📝',
+      'Hmm, deixa eu pensar sobre isso...',
+      'Ainda não sei te responder isso com certeza, mas continua testando o chat!'
+    ]);
+  }
+
+  // reação ao humor da própria mensagem (reaproveita o motor de reações)
+  const recipe = pickReaction(userText);
+  if (recipe){
+    if (recipe.type === 'fire') return pickVaried(['🔥🔥 isso pegou fogo mesmo, olha a bolha!', 'Caramba, que energia! Reparou que a bolha queimou de verdade?']);
+    if (recipe.type === 'droop') return pickVaried(['Poxa, sinto isso. Tô aqui se quiser desabafar mais.', 'Vi que ficou triste — quer conversar sobre?']);
+    if (recipe.type === 'pulse') return pickVaried(['Aaah que fofo ❤️', 'Isso encheu meu coração (literalmente, olha a bolha pulsando)']);
+    if (recipe.type === 'burst') return pickVaried(['UAU, não esperava essa!', 'Isso foi surpreendente mesmo 😲']);
+    if (recipe.type === 'bounce') return pickVaried(['Boa! Curti a energia dessa.', 'Isso sim é entusiasmo 👏']);
+    if (recipe.type === 'shake' && recipe.glow) return pickVaried(['Calma, respira — tô aqui.', 'Percebi que você ficou irritado(a). Quer falar sobre?']);
+  }
+
+  // mensagem curta tipo "kkk"
+  if (/^k{3,}$|haha|rs{3,}/.test(t)){
+    return pickVaried(['kkkkkk', 'haha imagina', 'kkkk verdade']);
+  }
+
+  // fallback: engajado, varia bastante pra não repetir
+  return pickVaried([
+    'Entendi! Me conta mais sobre isso.',
+    'Interessante — continua, tô acompanhando.',
+    'Faz sentido pra mim. E aí, o que mais?',
+    'Legal saber disso!',
+    'Tô testando as reações também — manda um emoji forte pra ver a bolha reagir 😄'
+  ]);
+}
 
 let msgCounter = 0;
 let replyingTo = null; // { id, text, isMe }
@@ -1482,11 +1562,13 @@ function sendChatMsg(){
 
   const hint = document.getElementById('typingHint');
   hint.textContent = (activeContact ? activeContact.name : 'contato') + ' está digitando...';
+  // tempo de "digitando" varia com o tamanho da resposta, fica mais natural
+  const reply = generateBotReply(text);
+  const typingTime = Math.min(600 + reply.length * 22, 2400);
   setTimeout(() => {
     hint.textContent = '';
-    const reply = CANNED_REPLIES[Math.floor(Math.random() * CANNED_REPLIES.length)];
     addChatMsg(reply, false);
-  }, 900 + Math.random() * 900);
+  }, typingTime);
 }
 document.getElementById('chatSendBtn').onclick = sendChatMsg;
 chatMsgInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendChatMsg(); });
