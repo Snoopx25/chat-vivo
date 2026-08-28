@@ -424,11 +424,12 @@
   .chat-thread::-webkit-scrollbar{ width:5px; }
   .chat-thread::-webkit-scrollbar-thumb{ background:rgba(255,255,255,0.1); border-radius:8px; }
 
-  .msg-row{ display:flex; }
+  .msg-row{ display:flex; width:100%; }
   .msg-row.me{ justify-content:flex-end; }
   .msg-row.friend{ justify-content:flex-start; }
   .msg-bubble{
-    max-width:75%; padding:10px 14px; border-radius:18px; font-size:14.5px; line-height:1.4;
+    display:inline-block; width:fit-content; max-width:100%;
+    padding:10px 14px; border-radius:18px; font-size:14.5px; line-height:1.4;
     position:relative; transform-origin:bottom center; word-wrap:break-word; white-space:pre-wrap;
   }
   .msg-row.me .msg-bubble{
@@ -608,7 +609,7 @@
     max-width:75%;
   }
   .msg-row.me .reply-quote{ align-self:flex-end; text-align:right; border-left:none; border-right:3px solid var(--neon-pink); background:rgba(255,79,160,0.08); }
-  .msg-col{ display:flex; flex-direction:column; max-width:75%; }
+  .msg-col{ display:flex; flex-direction:column; max-width:78%; min-width:0; }
   .msg-row.me .msg-col{ align-items:flex-end; margin-left:auto; }
   .msg-row.friend .msg-col{ align-items:flex-start; }
   .reply-bar{
@@ -664,6 +665,115 @@
     padding:4px; line-height:1;
   }
   .star-btn.active{ color:var(--neon-lime); }
+  /* ===================== PERSONALIZAÇÃO DE PERFIL ===================== */
+  .color-swatches{ display:flex; gap:9px; flex-wrap:wrap; align-items:center; }
+  .color-swatches button{
+    width:30px; height:30px; border-radius:50%; border:2px solid transparent; cursor:pointer;
+    position:relative; flex-shrink:0;
+  }
+  .color-swatches button.active{ border-color:#fff; box-shadow:0 0 0 2px rgba(255,255,255,0.2); }
+  .color-swatch-custom{
+    width:30px; height:30px; border-radius:50%; flex-shrink:0; cursor:pointer;
+    background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);
+    display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
+  }
+  .color-swatch-custom input[type=color]{
+    position:absolute; inset:-4px; opacity:0; cursor:pointer; width:38px; height:38px;
+  }
+
+  .music-source-tabs{ display:flex; background:var(--field); border-radius:11px; padding:3px; margin-bottom:8px; }
+  .music-source-tabs button{
+    flex:1; border:none; background:transparent; color:var(--muted); font-family:'Fredoka', sans-serif;
+    font-weight:500; font-size:12px; padding:8px; border-radius:8px; cursor:pointer;
+  }
+  .music-source-tabs button.active{ background:var(--neon-pink); color:#2a0a1c; }
+  .music-picker{ margin-top:4px; }
+  #spotifyEmbedDisplay iframe{ border-radius:12px; display:block; }
+  #spotifyPreview iframe{ border-radius:12px; display:block; }
+  .music-pick-btn{
+    width:100%; background:var(--field); border:1px solid rgba(255,255,255,0.08); color:var(--ink);
+    padding:12px; border-radius:12px; font-family:'Fredoka', sans-serif; font-size:13px; cursor:pointer;
+  }
+  .music-picked{
+    display:flex; align-items:center; gap:10px; background:rgba(255,79,160,0.08);
+    border:1px solid rgba(255,79,160,0.25); border-radius:12px; padding:10px 14px;
+  }
+  .music-picked span{ flex:1; font-size:12.5px; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .music-picked button{ background:none; border:none; color:var(--muted); font-size:15px; cursor:pointer; }
+
+  .bg-preset-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; }
+  .bg-preset-grid button{
+    background:var(--field); border:1px solid rgba(255,255,255,0.08); border-radius:12px;
+    padding:8px; display:flex; flex-direction:column; align-items:center; gap:6px;
+    font-size:10.5px; color:var(--muted); cursor:pointer; font-family:'Fredoka', sans-serif;
+  }
+  .bg-preset-grid button.active{ border-color:var(--neon-pink); color:var(--ink); }
+  .bg-swatch{ width:100%; height:36px; border-radius:8px; display:block; overflow:hidden; }
+  .bg-swatch-none{ background:repeating-linear-gradient(45deg, #2A2044, #2A2044 4px, #1E1533 4px, #1E1533 8px); }
+  .bg-swatch-bubbles{ background:radial-gradient(circle at 30% 60%, rgba(62,232,216,0.5) 0 6px, transparent 7px), radial-gradient(circle at 70% 30%, rgba(255,79,160,0.5) 0 5px, transparent 6px), #1E1533; }
+  .bg-swatch-stars{ background:radial-gradient(1.5px 1.5px at 20% 30%, #fff, transparent), radial-gradient(1.5px 1.5px at 60% 60%, #fff, transparent), radial-gradient(1.5px 1.5px at 80% 20%, #fff, transparent), #150F23; }
+  .bg-swatch-wave{ background:linear-gradient(180deg, #1E1533, #2A1F4A); }
+  .bg-swatch-confetti{ background:conic-gradient(from 0deg, #FF4FA0, #FFD93D, #3EE8D8, #C6FF3E, #FF4FA0); }
+
+  /* --- camada de fundo animado, atrás do conteúdo da aba Perfil --- */
+  .profile-bg-layer{
+    position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:-1;
+    background-size:cover; background-position:center;
+  }
+
+  .profile-bg-layer.bg-bubbles span{
+    position:absolute; bottom:-30px; border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), rgba(255,255,255,0.02));
+    animation:bgBubbleUp linear infinite;
+  }
+  @keyframes bgBubbleUp{
+    0%{ transform:translateY(0) translateX(0); opacity:0; }
+    10%{ opacity:.5; }
+    100%{ transform:translateY(-620px) translateX(var(--bx,20px)); opacity:0; }
+  }
+  .profile-bg-layer.bg-stars span{
+    position:absolute; width:2px; height:2px; background:#fff; border-radius:50%;
+    animation:bgStarTwinkle ease-in-out infinite;
+  }
+  @keyframes bgStarTwinkle{ 0%,100%{ opacity:.15; } 50%{ opacity:.9; } }
+  .profile-bg-layer.bg-wave{
+    background:linear-gradient(120deg, rgba(255,79,160,0.10), rgba(62,232,216,0.10), rgba(198,255,62,0.08));
+    background-size:220% 220%; animation:bgWaveShift 8s ease-in-out infinite;
+  }
+  @keyframes bgWaveShift{ 0%,100%{ background-position:0% 40%; } 50%{ background-position:100% 60%; } }
+  .profile-bg-layer.bg-confetti span{
+    position:absolute; top:-20px; font-size:13px; opacity:0;
+    animation:bgConfettiFall linear infinite;
+  }
+  @keyframes bgConfettiFall{
+    0%{ transform:translateY(0) rotate(0deg); opacity:0; }
+    8%{ opacity:.7; }
+    100%{ transform:translateY(640px) rotate(320deg); opacity:0; }
+  }
+  .profile-bg-layer.bg-custom-image{ opacity:.28; filter:blur(0.5px); }
+
+  /* --- mini player de música do perfil --- */
+  .music-player{
+    display:flex; align-items:center; gap:10px; margin-top:12px; padding:9px 12px;
+    background:var(--field); border:1px solid rgba(255,255,255,0.08); border-radius:14px; max-width:220px;
+  }
+  .music-play-btn{
+    width:30px; height:30px; border-radius:50%; background:var(--neon-pink); color:#2a0a1c;
+    border:none; font-size:11px; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  }
+  .music-info{ flex:1; min-width:0; }
+  .music-title{ font-size:11px; color:var(--ink); margin:0 0 4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .music-bars{ display:flex; gap:2px; align-items:flex-end; height:10px; }
+  .music-bars span{
+    width:3px; background:var(--neon-cyan); border-radius:2px; opacity:.4;
+    animation:musicBarBounce 1s ease-in-out infinite;
+  }
+  .music-bars span:nth-child(1){ height:40%; animation-delay:0s; }
+  .music-bars span:nth-child(2){ height:100%; animation-delay:.15s; }
+  .music-bars span:nth-child(3){ height:60%; animation-delay:.3s; }
+  .music-bars span:nth-child(4){ height:85%; animation-delay:.45s; }
+  .music-bars.paused span{ animation-play-state:paused; opacity:.2; }
+  @keyframes musicBarBounce{ 0%,100%{ transform:scaleY(.4); } 50%{ transform:scaleY(1); } }
 </style>
 </head>
 <body>
@@ -754,7 +864,9 @@
 
   <!-- ===== ABA: PERFIL ===== -->
   <div class="tab-screen" id="tab-profile">
-    <div class="scroll-area" style="padding-bottom:20px;">
+    <div class="scroll-area" style="padding-bottom:20px; position:relative;">
+      <div class="profile-bg-layer" id="profileBgLayer"></div>
+
       <div class="profile-cover" id="profileCoverDisplay">
         <div class="profile-avatar-wrap">
           <div class="avatar ring" id="profileAvatarDisplay" style="--ring-color:var(--neon-lime); background:linear-gradient(135deg,#FF4FA0,#7A2A8C);">V</div>
@@ -764,6 +876,16 @@
         <h2 class="profile-name" id="profileNameDisplay">Você</h2>
         <p class="profile-status" id="profileStatusDisplay">Disponível pra conversar ✨</p>
         <p class="profile-id">🔗 chatvivo://voce-8f3k2j</p>
+
+        <div class="music-player" id="musicPlayer" style="display:none;">
+          <button class="music-play-btn" id="musicPlayBtn" type="button">▶</button>
+          <div class="music-info">
+            <p class="music-title" id="musicTitle">—</p>
+            <div class="music-bars"><span></span><span></span><span></span><span></span></div>
+          </div>
+        </div>
+        <div id="spotifyEmbedDisplay" style="display:none; margin-top:12px;"></div>
+        <audio id="profileAudio" loop></audio>
       </div>
 
       <div class="stats-row">
@@ -888,8 +1010,9 @@
           </div>
         </div>
       </div>
-      <input type="file" id="coverFileInput" accept="image/*" style="display:none;">
-      <input type="file" id="avatarFileInput" accept="image/*" style="display:none;">
+      <input type="file" id="coverFileInput" accept="image/*,image/gif" style="display:none;">
+      <input type="file" id="avatarFileInput" accept="image/*,image/gif" style="display:none;">
+      <p class="settings-hint" style="padding:8px 20px 0; margin:0;">Foto ou GIF — ambos funcionam na capa e no avatar.</p>
 
       <div class="edit-form">
         <div class="field-group">
@@ -900,7 +1023,59 @@
           <p class="field-label">Status</p>
           <textarea class="field-input" id="editStatusInput" rows="2">Disponível pra conversar ✨</textarea>
         </div>
-        <button class="btn-primary" id="saveProfileBtn">Salvar alterações</button>
+
+        <p class="settings-section-label" style="margin-top:8px;">Cor de destaque</p>
+        <div class="color-swatches" id="colorSwatches">
+          <button type="button" data-color="#FF4FA0" class="active" style="background:#FF4FA0;"></button>
+          <button type="button" data-color="#3EE8D8" style="background:#3EE8D8;"></button>
+          <button type="button" data-color="#C6FF3E" style="background:#C6FF3E;"></button>
+          <button type="button" data-color="#FFD93D" style="background:#FFD93D;"></button>
+          <button type="button" data-color="#B98CFF" style="background:#B98CFF;"></button>
+          <button type="button" data-color="#FF6B6B" style="background:#FF6B6B;"></button>
+          <label class="color-swatch-custom">
+            <input type="color" id="customColorInput" value="#FF4FA0">
+          </label>
+        </div>
+
+        <p class="settings-section-label">Música do perfil</p>
+        <p class="settings-hint" style="margin-top:-4px;">Toca pra quem visitar seu perfil — sua escolha, 100% livre.</p>
+
+        <div class="music-source-tabs">
+          <button type="button" class="active" data-source="file">Arquivo de áudio</button>
+          <button type="button" data-source="spotify">Link do Spotify</button>
+        </div>
+
+        <div class="music-picker" id="musicPicker">
+          <button type="button" class="music-pick-btn" id="pickMusicBtn">🎵 Escolher música (arquivo de áudio)</button>
+          <div class="music-picked" id="musicPicked" style="display:none;">
+            <span id="musicPickedName">—</span>
+            <button type="button" id="removeMusicBtn">✕</button>
+          </div>
+        </div>
+        <input type="file" id="musicFileInput" accept="audio/*" style="display:none;">
+
+        <div class="music-picker" id="spotifyPicker" style="display:none;">
+          <div class="field-input-row">
+            <input type="text" class="field-input" id="spotifyLinkInput" placeholder="Cole o link da música do Spotify aqui">
+            <button type="button" class="music-pick-btn" id="spotifyAddBtn" style="width:auto; padding:0 16px;">Usar</button>
+          </div>
+          <p class="field-error" id="spotifyLinkError"></p>
+          <div id="spotifyPreview" style="margin-top:8px;"></div>
+        </div>
+
+        <p class="settings-section-label">Fundo animado do perfil</p>
+        <p class="settings-hint" style="margin-top:-4px;">Escolha um efeito, ou suba sua própria imagem/GIF de fundo.</p>
+        <div class="bg-preset-grid" id="bgPresetGrid">
+          <button type="button" data-bg="none" class="active"><span class="bg-swatch bg-swatch-none"></span>Nenhum</button>
+          <button type="button" data-bg="bubbles"><span class="bg-swatch bg-swatch-bubbles"></span>Bolhas</button>
+          <button type="button" data-bg="stars"><span class="bg-swatch bg-swatch-stars"></span>Estrelas</button>
+          <button type="button" data-bg="wave"><span class="bg-swatch bg-swatch-wave"></span>Ondas</button>
+          <button type="button" data-bg="confetti"><span class="bg-swatch bg-swatch-confetti"></span>Confete</button>
+        </div>
+        <button type="button" class="btn-ghost" id="pickBgImageBtn" style="margin-top:10px;">🖼️ Usar imagem/GIF própria de fundo</button>
+        <input type="file" id="bgImageFileInput" accept="image/*,image/gif" style="display:none;">
+
+        <button class="btn-primary" id="saveProfileBtn" style="margin-top:18px;">Salvar alterações</button>
       </div>
     </div>
   </div>
@@ -1384,11 +1559,223 @@ let activeContact = null;
 let currentUserName = 'você';
 
 /* ==========================================================================
-   MOTOR DO BOT "VIVO" — interpreta a mensagem de verdade (saudação, pergunta,
-   despedida, agradecimento, humor do emoji) em vez de sortear frase solta.
-   Não é uma IA generativa — é regra + contexto, mas responde de acordo com
-   o que você escreveu, o que já basta pra testar a experiência real do chat.
+   MOTOR DO BOT "VIVO" — multilíngue. Detecta o idioma do APARELHO (mesma
+   lógica da tela de login) e responde nesse idioma, reconhecendo saudação,
+   pergunta, despedida, agradecimento e o humor da mensagem em cada um deles.
+   Não é IA generativa — é regra + contexto por idioma, mas já reconhece o
+   que você escreve de verdade em qualquer um dos 8 idiomas cobertos.
    ========================================================================== */
+const BOT_SUPPORTED_LANGS = ['pt','en','es','fr','de','it','ja','zh'];
+function detectDeviceLangForBot(){
+  const raw = (navigator.language || navigator.userLanguage || 'pt').toLowerCase();
+  const short = raw.split('-')[0];
+  return BOT_SUPPORTED_LANGS.includes(short) ? short : 'pt';
+}
+const BOT_LANG = detectDeviceLangForBot();
+
+const BOT_I18N = {
+  pt: {
+    greeting: /^(oi+|ol[aá]|e ?a[ií]|opa|salve)\b/,
+    farewell: /tchau|falou|até (mais|logo|amanhã)|vou nessa|indo dormir/,
+    thanks: /obrigad[oa]|valeu|vlw|agrade[cç]o/,
+    question: /^(quem|o ?que|como|quando|onde|por ?que|qual|será que)\b/,
+    laugh: /^k{3,}$|haha|rs{3,}/,
+    timeQ: /que horas? (são|é)/, dateQ: /que dia é hoje|data de hoje/, nameQ: /seu nome|quem (é você|te fez|criou você)/,
+    timeOfDay: h => h < 6 ? 'boa madrugada' : h < 12 ? 'bom dia' : h < 18 ? 'boa tarde' : 'boa noite',
+    timeAns: t => 'Agora são ' + t + ' aqui no seu aparelho.',
+    dateAns: d => 'Hoje é ' + d + '.',
+    locale: 'pt-BR',
+    nameReplies: ['Sou o Vivo, o assistente de teste do Chat Vivo 🙂', 'Me chamo Vivo — tô aqui só pra você testar o chat de verdade.'],
+    greetingReplies: (tod, name) => [tod + ', ' + name + '! Tudo certo por aí?', 'Oi! Que bom te ver por aqui, ' + name + '.', tod + '! Como você tá?'],
+    farewellReplies: name => ['Até mais, ' + name + '! 👋', 'Falou! Volta quando quiser.', 'Tchau! Foi bom testar com você.'],
+    thanksReplies: ['De nada! 😊', 'Imagina, disponha!', 'Sempre que precisar 🙏'],
+    questionReplies: ['Boa pergunta! Ainda não tenho essa resposta pronta, mas tô guardando aqui 📝', 'Hmm, deixa eu pensar sobre isso...', 'Ainda não sei te responder isso com certeza, mas continua testando o chat!'],
+    laughReplies: ['kkkkkk', 'haha imagina', 'kkkk verdade'],
+    mood: { fire:['🔥🔥 isso pegou fogo mesmo, olha a bolha!', 'Caramba, que energia! Reparou que a bolha queimou de verdade?'],
+      droop:['Poxa, sinto isso. Tô aqui se quiser desabafar mais.', 'Vi que ficou triste — quer conversar sobre?'],
+      pulse:['Aaah que fofo ❤️', 'Isso encheu meu coração (literalmente, olha a bolha pulsando)'],
+      burst:['UAU, não esperava essa!', 'Isso foi surpreendente mesmo 😲'],
+      bounce:['Boa! Curti a energia dessa.', 'Isso sim é entusiasmo 👏'],
+      angry:['Calma, respira — tô aqui.', 'Percebi que você ficou irritado(a). Quer falar sobre?'] },
+    fallback: ['Entendi! Me conta mais sobre isso.', 'Interessante — continua, tô acompanhando.', 'Faz sentido pra mim. E aí, o que mais?', 'Legal saber disso!', 'Tô testando as reações também — manda um emoji forte pra ver a bolha reagir 😄']
+  },
+  en: {
+    greeting: /^(hi+|hello|hey+|yo|what'?s up|sup)\b/,
+    farewell: /bye|see (you|ya)|gotta go|talk (later|soon)|good ?night/,
+    thanks: /thanks|thank you|thx|appreciate it/,
+    question: /^(who|what|how|when|where|why|which|could|would|do you)\b/,
+    laugh: /^l{2,}o{2,}l$|haha|lmao/,
+    timeQ: /what time is it/, dateQ: /what('?s| is) (the date|today)/, nameQ: /your name|who (are you|made you|created you)/,
+    timeOfDay: h => h < 6 ? 'good early morning' : h < 12 ? 'good morning' : h < 18 ? 'good afternoon' : 'good evening',
+    timeAns: t => 'It\u2019s ' + t + ' right now on your device.',
+    dateAns: d => 'Today is ' + d + '.',
+    locale: 'en-US',
+    nameReplies: ['I\u2019m Vivo, the Chat Vivo test assistant 🙂', 'My name\u2019s Vivo — I\u2019m just here so you can test the real chat.'],
+    greetingReplies: (tod, name) => [tod + ', ' + name + '! How\u2019s it going?', 'Hey! Good to see you here, ' + name + '.', tod + '! How are you?'],
+    farewellReplies: name => ['See you, ' + name + '! 👋', 'Later! Come back anytime.', 'Bye! Nice testing with you.'],
+    thanksReplies: ['You\u2019re welcome! 😊', 'Anytime, happy to help!', 'Sure thing 🙏'],
+    questionReplies: ['Good question! I don\u2019t have that answer ready yet, but I\u2019m noting it 📝', 'Hmm, let me think about that...', 'Not sure yet, but keep testing the chat!'],
+    laughReplies: ['lol', 'haha for real', 'lol true'],
+    mood: { fire:['🔥🔥 that really caught fire, look at the bubble!', 'Whoa, that energy! Notice the bubble actually burned?'],
+      droop:['Aw, I feel that. I\u2019m here if you want to talk more.', 'Saw that felt sad — want to talk about it?'],
+      pulse:['Aww that\u2019s sweet ❤️', 'That warmed my heart (literally, look at the bubble pulse)'],
+      burst:['WOW, wasn\u2019t expecting that!', 'That was genuinely surprising 😲'],
+      bounce:['Nice! Loving that energy.', 'Now that\u2019s enthusiasm 👏'],
+      angry:['Take a breath — I\u2019m here.', 'Noticed you got upset. Want to talk about it?'] },
+    fallback: ['Got it! Tell me more.', 'Interesting — keep going, I\u2019m with you.', 'Makes sense to me. What else?', 'Cool to know!', 'I\u2019m testing reactions too — send a strong emoji to see the bubble react 😄']
+  },
+  es: {
+    greeting: /^(hola+|ey|qu[eé] tal|buenas)\b/,
+    farewell: /adi[oó]s|chao|nos vemos|hasta (luego|pronto|mañana)/,
+    thanks: /gracias|te agradezco/,
+    question: /^(qui[eé]n|qu[eé]|c[oó]mo|cu[aá]ndo|d[oó]nde|por ?qu[eé]|cu[aá]l)\b/,
+    laugh: /^ja{2,}$|jaja|jeje/,
+    timeQ: /qu[eé] hora es/, dateQ: /qu[eé] d[ií]a es hoy|fecha de hoy/, nameQ: /tu nombre|qui[eé]n eres/,
+    timeOfDay: h => h < 6 ? 'buena madrugada' : h < 12 ? 'buenos días' : h < 20 ? 'buenas tardes' : 'buenas noches',
+    timeAns: t => 'Ahora son las ' + t + ' en tu dispositivo.',
+    dateAns: d => 'Hoy es ' + d + '.',
+    locale: 'es-ES',
+    nameReplies: ['Soy Vivo, el asistente de prueba de Chat Vivo 🙂', 'Me llamo Vivo — estoy aquí para que pruebes el chat de verdad.'],
+    greetingReplies: (tod, name) => [tod + ', ' + name + '! ¿Todo bien?', '¡Hola! Qué bueno verte por aquí, ' + name + '.', tod + '! ¿Cómo estás?'],
+    farewellReplies: name => ['¡Nos vemos, ' + name + '! 👋', '¡Chao! Vuelve cuando quieras.', '¡Adiós! Fue bueno probar contigo.'],
+    thanksReplies: ['¡De nada! 😊', 'Para eso estoy 🙏', 'Cuando quieras.'],
+    questionReplies: ['¡Buena pregunta! Todavía no tengo esa respuesta lista, pero la anoto 📝', 'Hmm, déjame pensarlo...', 'Aún no lo sé con certeza, ¡sigue probando el chat!'],
+    laughReplies: ['jajaja', 'jaja verdad', 'jajaja de verdad'],
+    mood: { fire:['🔥🔥 eso sí se incendió, mira la burbuja!', '¡Wow, qué energía! ¿Viste que la burbuja se quemó de verdad?'],
+      droop:['Vaya, lo siento. Aquí estoy si quieres contarme más.', 'Vi que te pusiste triste — ¿quieres hablar de eso?'],
+      pulse:['Aaay qué tierno ❤️', 'Eso me llenó el corazón (mira la burbuja latiendo)'],
+      burst:['¡GUAU, no me lo esperaba!', 'Eso sí fue sorprendente 😲'],
+      bounce:['¡Bien! Me encanta esa energía.', 'Eso sí es entusiasmo 👏'],
+      angry:['Tranquilo(a), respira — aquí estoy.', 'Noté que te molestaste. ¿Quieres hablar?'] },
+    fallback: ['¡Entendido! Cuéntame más.', 'Interesante — sigue, te escucho.', 'Tiene sentido. ¿Qué más?', '¡Qué bueno saberlo!', 'También estoy probando las reacciones — manda un emoji fuerte para ver la burbuja reaccionar 😄']
+  },
+  fr: {
+    greeting: /^(salut|coucou|bonjour|bonsoir|hey)\b/,
+    farewell: /au revoir|à (plus|bientôt|demain)|je dois y aller/,
+    thanks: /merci/,
+    question: /^(qui|que|quoi|comment|quand|où|pourquoi|quel)\b/,
+    laugh: /^h{2,}$|mdr|ptdr/,
+    timeQ: /quelle heure est-il/, dateQ: /quel jour (sommes-nous|est-ce)|date d'aujourd'hui/, nameQ: /ton nom|qui es-tu/,
+    timeOfDay: h => h < 6 ? 'bonne petite nuit' : h < 12 ? 'bonjour' : h < 18 ? 'bon après-midi' : 'bonsoir',
+    timeAns: t => 'Il est ' + t + ' sur votre appareil.',
+    dateAns: d => 'Nous sommes le ' + d + '.',
+    locale: 'fr-FR',
+    nameReplies: ['Je suis Vivo, l\u2019assistant de test de Chat Vivo 🙂', 'Je m\u2019appelle Vivo — je suis là pour que tu testes le vrai chat.'],
+    greetingReplies: (tod, name) => [tod + ', ' + name + ' ! Tout va bien ?', 'Salut ! Content de te voir ici, ' + name + '.', tod + ' ! Comment vas-tu ?'],
+    farewellReplies: name => ['À plus, ' + name + ' ! 👋', 'Salut ! Reviens quand tu veux.', 'Au revoir ! C\u2019était sympa de tester avec toi.'],
+    thanksReplies: ['De rien ! 😊', 'Avec plaisir !', 'Quand tu veux 🙏'],
+    questionReplies: ['Bonne question ! Je n\u2019ai pas encore cette réponse, mais je la note 📝', 'Hmm, laisse-moi y réfléchir...', 'Pas sûr encore, continue à tester le chat !'],
+    laughReplies: ['mdrrr', 'haha vrai', 'mdr carrément'],
+    mood: { fire:['🔥🔥 ça a vraiment pris feu, regarde la bulle !', 'Waouh, quelle énergie ! T\u2019as vu que la bulle a vraiment brûlé ?'],
+      droop:['Oh, je ressens ça. Je suis là si tu veux en parler.', 'J\u2019ai vu que t\u2019étais triste — tu veux en parler ?'],
+      pulse:['Aaah trop mignon ❤️', 'Ça m\u2019a touché le cœur (regarde la bulle palpiter)'],
+      burst:['WOW, je m\u2019y attendais pas !', 'Ça, c\u2019était vraiment surprenant 😲'],
+      bounce:['Cool ! J\u2019adore cette énergie.', 'Ça c\u2019est de l\u2019enthousiasme 👏'],
+      angry:['Respire — je suis là.', 'J\u2019ai remarqué que t\u2019étais énervé(e). On en parle ?'] },
+    fallback: ['Compris ! Dis-m\u2019en plus.', 'Intéressant — continue, je suis avec toi.', 'Ça a du sens. Quoi d\u2019autre ?', 'Cool à savoir !', 'Je teste aussi les réactions — envoie un emoji fort pour voir la bulle réagir 😄']
+  },
+  de: {
+    greeting: /^(hallo|hi+|hey|servus|moin)\b/,
+    farewell: /tsch(ü|u)ss|bis (später|bald|morgen)|muss los/,
+    thanks: /danke/,
+    question: /^(wer|was|wie|wann|wo|warum|welch)\b/,
+    laugh: /^h{2,}$|haha/,
+    timeQ: /wie sp[aä]t ist es/, dateQ: /welcher tag ist heute|heutiges datum/, nameQ: /dein name|wer bist du/,
+    timeOfDay: h => h < 6 ? 'gute frühe Morgenstunde' : h < 12 ? 'guten Morgen' : h < 18 ? 'guten Tag' : 'guten Abend',
+    timeAns: t => 'Es ist gerade ' + t + ' auf deinem Gerät.',
+    dateAns: d => 'Heute ist ' + d + '.',
+    locale: 'de-DE',
+    nameReplies: ['Ich bin Vivo, der Test-Assistent von Chat Vivo 🙂', 'Ich heiße Vivo — ich bin hier, damit du den echten Chat testen kannst.'],
+    greetingReplies: (tod, name) => [tod + ', ' + name + '! Alles gut bei dir?', 'Hey! Schön dich hier zu sehen, ' + name + '.', tod + '! Wie geht\u2019s dir?'],
+    farewellReplies: name => ['Bis später, ' + name + '! 👋', 'Tschüss! Komm wieder, wann du willst.', 'Tschüss! Hat Spaß gemacht mit dir zu testen.'],
+    thanksReplies: ['Gern geschehen! 😊', 'Jederzeit!', 'Kein Problem 🙏'],
+    questionReplies: ['Gute Frage! Die Antwort hab ich noch nicht, aber ich merk sie mir 📝', 'Hmm, lass mich kurz nachdenken...', 'Weiß ich noch nicht genau, teste einfach weiter!'],
+    laughReplies: ['hahaha', 'haha stimmt', 'haha genau'],
+    mood: { fire:['🔥🔥 das hat wirklich Feuer gefangen, schau die Blase an!', 'Wow, diese Energie! Hast du gesehen, dass die Blase wirklich verbrannt ist?'],
+      droop:['Oh, das tut mir leid. Ich bin da, wenn du reden willst.', 'Hab gesehen, dass du traurig bist — willst du drüber reden?'],
+      pulse:['Aaah wie süß ❤️', 'Das hat mein Herz erwärmt (schau die Blase pulsieren)'],
+      burst:['WOW, das hab ich nicht erwartet!', 'Das war wirklich überraschend 😲'],
+      bounce:['Cool! Liebe diese Energie.', 'Das ist mal Begeisterung 👏'],
+      angry:['Atme durch — ich bin da.', 'Hab gemerkt, dass du sauer bist. Willst du drüber reden?'] },
+    fallback: ['Verstanden! Erzähl mir mehr.', 'Interessant — mach weiter, ich bin dabei.', 'Macht Sinn. Was noch?', 'Gut zu wissen!', 'Ich teste auch die Reaktionen — schick ein starkes Emoji, um die Blase reagieren zu sehen 😄']
+  },
+  it: {
+    greeting: /^(ciao|salve|ehi|buongiorno|buonasera)\b/,
+    farewell: /arrivederci|ci vediamo|a (dopo|presto|domani)/,
+    thanks: /grazie/,
+    question: /^(chi|cosa|come|quando|dove|perch[eé]|quale)\b/,
+    laugh: /^ah{2,}$|ahah|lol/,
+    timeQ: /che ore sono/, dateQ: /che giorno è oggi|data di oggi/, nameQ: /il tuo nome|chi sei/,
+    timeOfDay: h => h < 6 ? 'buonanotte inoltrata' : h < 12 ? 'buongiorno' : h < 18 ? 'buon pomeriggio' : 'buonasera',
+    timeAns: t => 'Sono le ' + t + ' sul tuo dispositivo.',
+    dateAns: d => 'Oggi è ' + d + '.',
+    locale: 'it-IT',
+    nameReplies: ['Sono Vivo, l\u2019assistente di prova di Chat Vivo 🙂', 'Mi chiamo Vivo — sono qui per farti provare la chat vera.'],
+    greetingReplies: (tod, name) => [tod + ', ' + name + '! Tutto bene?', 'Ciao! Che bello vederti qui, ' + name + '.', tod + '! Come stai?'],
+    farewellReplies: name => ['Ci vediamo, ' + name + '! 👋', 'Ciao! Torna quando vuoi.', 'Arrivederci! È stato bello provare con te.'],
+    thanksReplies: ['Di niente! 😊', 'Figurati!', 'Quando vuoi 🙏'],
+    questionReplies: ['Bella domanda! Non ho ancora quella risposta pronta, ma la segno 📝', 'Hmm, fammici pensare...', 'Non lo so ancora con certezza, continua a provare la chat!'],
+    laughReplies: ['ahahah', 'ahah vero', 'ahah proprio'],
+    mood: { fire:['🔥🔥 ha davvero preso fuoco, guarda la bolla!', 'Wow, che energia! Hai visto che la bolla si è davvero bruciata?'],
+      droop:['Oh, mi dispiace. Sono qui se vuoi parlarne.', 'Ho visto che sei triste — vuoi parlarne?'],
+      pulse:['Aaah che tenero ❤️', 'Mi ha scaldato il cuore (guarda la bolla pulsare)'],
+      burst:['WOW, non me l\u2019aspettavo!', 'Questo sì che è stato sorprendente 😲'],
+      bounce:['Bello! Adoro questa energia.', 'Questo sì è entusiasmo 👏'],
+      angry:['Respira — sono qui.', 'Ho notato che ti sei arrabbiato(a). Vuoi parlarne?'] },
+    fallback: ['Capito! Dimmi di più.', 'Interessante — continua, ti sto seguendo.', 'Ha senso. Cos\u2019altro?', 'Bello saperlo!', 'Sto provando anche le reazioni — manda un\u2019emoji forte per vedere la bolla reagire 😄']
+  },
+  ja: {
+    greeting: /^(やあ|こんにちは|おはよう|こんばんは|hi|hey)/,
+    farewell: /さようなら|またね|じゃあね|バイバイ/,
+    thanks: /ありがとう|感謝/,
+    question: /(誰|何|どう|いつ|どこ|なぜ|どれ)|[?？]$/,
+    laugh: /^w{2,}$|笑|ｗｗｗ/,
+    timeQ: /今何時/, dateQ: /今日は何日|今日の日付/, nameQ: /あなたの名前|あなたは誰/,
+    timeOfDay: h => h < 6 ? 'こんな夜遅くに' : h < 12 ? 'おはよう' : h < 18 ? 'こんにちは' : 'こんばんは',
+    timeAns: t => '今、あなたの端末では ' + t + ' です。',
+    dateAns: d => '今日は ' + d + ' です。',
+    locale: 'ja-JP',
+    nameReplies: ['僕はVivo、Chat Vivoのテストアシスタントです 🙂', 'Vivoといいます — 本物のチャットを試してもらうためにここにいます。'],
+    greetingReplies: (tod, name) => [tod + '、' + name + 'さん！元気ですか？', 'やあ！ここで会えて嬉しいです、' + name + 'さん。', tod + '！調子はどうですか？'],
+    farewellReplies: name => ['またね、' + name + 'さん！👋', 'バイバイ！またいつでも来てね。', 'さようなら！テストできて楽しかったです。'],
+    thanksReplies: ['どういたしまして！😊', 'いつでもどうぞ！', 'お役に立てて嬉しいです 🙏'],
+    questionReplies: ['いい質問ですね！まだ答えは用意できていませんが、メモしておきます 📝', 'うーん、ちょっと考えさせてください…', 'まだはっきりとは分かりませんが、チャットを試し続けてください！'],
+    laughReplies: ['wwww', '本当に笑える', 'それな、笑'],
+    mood: { fire:['🔥🔥 本当に燃えましたね、バブルを見て！', 'すごいエネルギー！バブルが本当に燃えたの気づきました？'],
+      droop:['それは辛いですね。もっと話したいことがあればここにいます。', '悲しそうですね — 話してみますか？'],
+      pulse:['ああ、かわいい ❤️', '心が温まりました（バブルが脈打ってるの見て）'],
+      burst:['うわ、予想外でした！', '本当に驚きました 😲'],
+      bounce:['いいね！そのエネルギー好きです。', 'それこそ情熱ですね 👏'],
+      angry:['深呼吸して — ここにいますよ。', '怒っているみたいですね。話しますか？'] },
+    fallback: ['なるほど！もっと聞かせてください。', '面白いですね — 続けてください、聞いてます。', 'なるほど、納得です。他には？', 'それは知らなかった！', 'リアクションもテスト中です — 強めの絵文字を送ってバブルの反応を見てみて 😄']
+  },
+  zh: {
+    greeting: /^(你好|嗨|哈喽|早上好|晚上好|hi|hey)/,
+    farewell: /再见|拜拜|回头见|晚安/,
+    thanks: /谢谢|感谢/,
+    question: /(谁|什么|怎么|何时|哪里|为什么|哪个)|[?？]$/,
+    laugh: /^哈{2,}$|笑死|233/,
+    timeQ: /现在几点/, dateQ: /今天几号|今天日期/, nameQ: /你叫什么|你是谁/,
+    timeOfDay: h => h < 6 ? '这么晚了还' : h < 12 ? '早上好' : h < 18 ? '下午好' : '晚上好',
+    timeAns: t => '你的设备上现在是 ' + t + '。',
+    dateAns: d => '今天是 ' + d + '。',
+    locale: 'zh-CN',
+    nameReplies: ['我是Vivo，Chat Vivo的测试助手 🙂', '我叫Vivo — 我在这里是为了让你测试真正的聊天体验。'],
+    greetingReplies: (tod, name) => [tod + '，' + name + '！一切都好吗？', '嗨！很高兴在这里见到你，' + name + '。', tod + '！你怎么样？'],
+    farewellReplies: name => ['再见，' + name + '！👋', '拜拜！随时欢迎回来。', '再见！和你一起测试很开心。'],
+    thanksReplies: ['不客气！😊', '应该的！', '随时为你效劳 🙏'],
+    questionReplies: ['好问题！我还没准备好答案，不过我记下来了 📝', '嗯，让我想想...', '我还不确定，继续测试聊天吧！'],
+    laughReplies: ['哈哈哈', '哈哈真的', '哈哈没错'],
+    mood: { fire:['🔥🔥 真的烧起来了，看气泡！', '哇，这能量！注意到气泡真的烧焦了吗？'],
+      droop:['哎，我能感受到。想聊聊的话我在这里。', '看到你难过了 — 想聊聊吗？'],
+      pulse:['啊好可爱 ❤️', '这让我心里暖暖的（看气泡在跳动）'],
+      burst:['哇，没想到会这样！', '这真的很让人惊讶 😲'],
+      bounce:['不错！喜欢这种能量。', '这才叫热情 👏'],
+      angry:['深呼吸 — 我在这里。', '感觉到你生气了，想聊聊吗？'] },
+    fallback: ['明白了！多跟我说说。', '有意思 — 继续，我在听。', '有道理，还有什么？', '这个我还不知道！', '我也在测试反应功能 — 发一个强烈的表情看看气泡的反应 😄']
+  }
+};
+
 const lastBotReplies = []; // evita repetir a mesma resposta em sequência
 
 function pickVaried(list){
@@ -1401,80 +1788,67 @@ function pickVaried(list){
   return choice;
 }
 
-function timeOfDayGreeting(){
-  const h = new Date().getHours();
-  if (h < 6) return 'boa madrugada';
-  if (h < 12) return 'bom dia';
-  if (h < 18) return 'boa tarde';
-  return 'boa noite';
+/* detecta o idioma da MENSAGEM em si (não só do aparelho) —
+   funciona muito bem pra escritas próprias (japonês/chinês) e usa
+   pistas de palavras (saudação/despedida/agradecimento/risada) pros
+   idiomas de alfabeto latino, caindo no idioma do aparelho quando
+   não há nenhuma pista clara. */
+function detectMessageLang(text){
+  if (/[\u3040-\u30ff]/.test(text)) return 'ja'; // hiragana/katakana só existe em japonês
+  if (/[\u4e00-\u9fff]/.test(text)) return BOT_LANG === 'zh' ? 'zh' : 'ja'; // só kanji/hanzi é ambíguo — usa o aparelho como desempate
+
+  const t = text.toLowerCase();
+  const scores = {};
+  for (const lang of BOT_SUPPORTED_LANGS){
+    if (lang === 'ja' || lang === 'zh') continue; // já tratados acima pela escrita
+    const L = BOT_I18N[lang];
+    let score = 0;
+    if (L.greeting.test(t)) score += 2;
+    if (L.farewell.test(t)) score += 2;
+    if (L.thanks.test(t)) score += 2;
+    if (L.nameQ.test(t)) score += 1;
+    if (L.laugh.test(t)) score += 1;
+    if (score > 0) scores[lang] = score;
+  }
+  const ranked = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  return ranked.length ? ranked[0][0] : BOT_LANG;
 }
 
 function generateBotReply(userText){
+  const msgLang = detectMessageLang(userText);
+  const L = BOT_I18N[msgLang] || BOT_I18N.pt;
   const t = userText.toLowerCase().trim();
+  const name = currentUserName;
 
-  // perguntas diretas que dá pra responder de verdade
-  if (/que horas? (são|é)/.test(t)){
-    return 'Agora são ' + new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }) + ' aqui no seu aparelho.';
+  if (L.timeQ.test(t)){
+    return L.timeAns(new Date().toLocaleTimeString(L.locale, { hour:'2-digit', minute:'2-digit' }));
   }
-  if (/que dia é hoje|data de hoje/.test(t)){
-    return 'Hoje é ' + new Date().toLocaleDateString('pt-BR', { weekday:'long', day:'numeric', month:'long' }) + '.';
+  if (L.dateQ.test(t)){
+    return L.dateAns(new Date().toLocaleDateString(L.locale, { weekday:'long', day:'numeric', month:'long' }));
   }
-  if (/seu nome|quem (é você|te fez|criou você)/.test(t)){
-    return pickVaried(['Sou o Vivo, o assistente de teste do Chat Vivo 🙂', 'Me chamo Vivo — tô aqui só pra você testar o chat de verdade.']);
-  }
+  if (L.nameQ.test(t)) return pickVaried(L.nameReplies);
 
-  // saudação
-  if (/^(oi+|ol[aá]|e ?a[ií]|opa|salve)\b/.test(t)){
-    return pickVaried([
-      timeOfDayGreeting() + ', ' + currentUserName + '! Tudo certo por aí?',
-      'Oi! Que bom te ver por aqui, ' + currentUserName + '.',
-      timeOfDayGreeting() + '! Como você tá?'
-    ]);
+  if (L.greeting.test(t)){
+    const h = new Date().getHours();
+    return pickVaried(L.greetingReplies(L.timeOfDay(h), name));
   }
+  if (L.farewell.test(t)) return pickVaried(L.farewellReplies(name));
+  if (L.thanks.test(t)) return pickVaried(L.thanksReplies);
+  if (/\?$|？$/.test(userText) || L.question.test(t)) return pickVaried(L.questionReplies);
 
-  // despedida
-  if (/tchau|falou|até (mais|logo|amanhã)|vou nessa|indo dormir/.test(t)){
-    return pickVaried(['Até mais, ' + currentUserName + '! 👋', 'Falou! Volta quando quiser.', 'Tchau! Foi bom testar com você.']);
-  }
-
-  // agradecimento
-  if (/obrigad[oa]|valeu|vlw|agradeço/.test(t)){
-    return pickVaried(['De nada! 😊', 'Imagina, disponha!', 'Sempre que precisar 🙏']);
-  }
-
-  // pergunta genérica (termina com ? ou começa com pergunta clássica)
-  if (/\?$/.test(userText) || /^(quem|o que|oque|como|quando|onde|por ?que|qual|será que)\b/.test(t)){
-    return pickVaried([
-      'Boa pergunta! Ainda não tenho essa resposta pronta, mas tô guardando aqui 📝',
-      'Hmm, deixa eu pensar sobre isso...',
-      'Ainda não sei te responder isso com certeza, mas continua testando o chat!'
-    ]);
-  }
-
-  // reação ao humor da própria mensagem (reaproveita o motor de reações)
   const recipe = pickReaction(userText);
   if (recipe){
-    if (recipe.type === 'fire') return pickVaried(['🔥🔥 isso pegou fogo mesmo, olha a bolha!', 'Caramba, que energia! Reparou que a bolha queimou de verdade?']);
-    if (recipe.type === 'droop') return pickVaried(['Poxa, sinto isso. Tô aqui se quiser desabafar mais.', 'Vi que ficou triste — quer conversar sobre?']);
-    if (recipe.type === 'pulse') return pickVaried(['Aaah que fofo ❤️', 'Isso encheu meu coração (literalmente, olha a bolha pulsando)']);
-    if (recipe.type === 'burst') return pickVaried(['UAU, não esperava essa!', 'Isso foi surpreendente mesmo 😲']);
-    if (recipe.type === 'bounce') return pickVaried(['Boa! Curti a energia dessa.', 'Isso sim é entusiasmo 👏']);
-    if (recipe.type === 'shake' && recipe.glow) return pickVaried(['Calma, respira — tô aqui.', 'Percebi que você ficou irritado(a). Quer falar sobre?']);
+    if (recipe.type === 'fire') return pickVaried(L.mood.fire);
+    if (recipe.type === 'droop') return pickVaried(L.mood.droop);
+    if (recipe.type === 'pulse') return pickVaried(L.mood.pulse);
+    if (recipe.type === 'burst') return pickVaried(L.mood.burst);
+    if (recipe.type === 'bounce') return pickVaried(L.mood.bounce);
+    if (recipe.type === 'shake' && recipe.glow) return pickVaried(L.mood.angry);
   }
 
-  // mensagem curta tipo "kkk"
-  if (/^k{3,}$|haha|rs{3,}/.test(t)){
-    return pickVaried(['kkkkkk', 'haha imagina', 'kkkk verdade']);
-  }
+  if (L.laugh.test(t)) return pickVaried(L.laughReplies);
 
-  // fallback: engajado, varia bastante pra não repetir
-  return pickVaried([
-    'Entendi! Me conta mais sobre isso.',
-    'Interessante — continua, tô acompanhando.',
-    'Faz sentido pra mim. E aí, o que mais?',
-    'Legal saber disso!',
-    'Tô testando as reações também — manda um emoji forte pra ver a bolha reagir 😄'
-  ]);
+  return pickVaried(L.fallback);
 }
 
 let msgCounter = 0;
@@ -1813,11 +2187,218 @@ avatarFileInput.addEventListener('change', () => {
   reader.readAsDataURL(file);
 });
 
+/* ===================== PERSONALIZAÇÃO: COR DE DESTAQUE ===================== */
+let selectedAccentColor = '#FF4FA0';
+document.querySelectorAll('#colorSwatches button[data-color]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#colorSwatches button[data-color]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedAccentColor = btn.dataset.color;
+  });
+});
+document.getElementById('customColorInput').addEventListener('input', (e) => {
+  document.querySelectorAll('#colorSwatches button[data-color]').forEach(b => b.classList.remove('active'));
+  selectedAccentColor = e.target.value;
+});
+
+/* ===================== PERSONALIZAÇÃO: MÚSICA DO PERFIL ===================== */
+const musicFileInput = document.getElementById('musicFileInput');
+const profileAudio = document.getElementById('profileAudio');
+let musicObjectURL = null;
+let musicFileName = null;
+
+document.getElementById('pickMusicBtn').onclick = () => musicFileInput.click();
+musicFileInput.addEventListener('change', () => {
+  const file = musicFileInput.files[0];
+  if (!file) return;
+  if (musicObjectURL) URL.revokeObjectURL(musicObjectURL);
+  musicObjectURL = URL.createObjectURL(file);
+  musicFileName = file.name;
+  document.getElementById('pickMusicBtn').style.display = 'none';
+  document.getElementById('musicPicked').style.display = 'flex';
+  document.getElementById('musicPickedName').textContent = musicFileName;
+
+  // remove a fonte do Spotify, já que só uma toca por vez
+  spotifyEmbedId = null; spotifyEmbedType = null;
+  document.getElementById('spotifyPreview').innerHTML = '';
+  document.getElementById('spotifyLinkInput').value = '';
+});
+document.getElementById('removeMusicBtn').onclick = () => {
+  if (musicObjectURL) URL.revokeObjectURL(musicObjectURL);
+  musicObjectURL = null; musicFileName = null;
+  musicFileInput.value = '';
+  document.getElementById('pickMusicBtn').style.display = 'block';
+  document.getElementById('musicPicked').style.display = 'none';
+};
+
+/* --- alternar entre arquivo de áudio e link do Spotify (só uma fonte por vez) --- */
+document.querySelectorAll('.music-source-tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.music-source-tabs button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const isFile = btn.dataset.source === 'file';
+    document.getElementById('musicPicker').style.display = isFile ? 'block' : 'none';
+    document.getElementById('spotifyPicker').style.display = isFile ? 'none' : 'block';
+  });
+});
+
+/* --- link do Spotify: extrai o ID e monta o player oficial incorporado (sem precisar de chave de API) --- */
+let spotifyEmbedId = null;
+let spotifyEmbedType = null;
+
+function parseSpotifyLink(url){
+  const m = url.match(/open\.spotify\.com\/(track|album|playlist|episode)\/([a-zA-Z0-9]+)/);
+  return m ? { type: m[1], id: m[2] } : null;
+}
+
+document.getElementById('spotifyAddBtn').onclick = () => {
+  const url = document.getElementById('spotifyLinkInput').value.trim();
+  const errEl = document.getElementById('spotifyLinkError');
+  const parsed = parseSpotifyLink(url);
+  if (!parsed){
+    errEl.textContent = 'Cole um link válido do Spotify (abrindo a música, toque em Compartilhar → Copiar link).';
+    return;
+  }
+  errEl.textContent = '';
+  spotifyEmbedType = parsed.type;
+  spotifyEmbedId = parsed.id;
+
+  // remove a fonte por arquivo, já que só uma toca por vez
+  if (musicObjectURL) URL.revokeObjectURL(musicObjectURL);
+  musicObjectURL = null; musicFileName = null;
+  document.getElementById('pickMusicBtn').style.display = 'block';
+  document.getElementById('musicPicked').style.display = 'none';
+
+  document.getElementById('spotifyPreview').innerHTML =
+    `<iframe src="https://open.spotify.com/embed/${spotifyEmbedType}/${spotifyEmbedId}" width="100%" height="80" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+  showToast('Música do Spotify pronta — clique em Salvar pra aplicar no perfil');
+};
+
+const musicPlayBtn = document.getElementById('musicPlayBtn');
+const musicBars = document.querySelector('#musicPlayer .music-bars');
+musicPlayBtn.onclick = () => {
+  if (profileAudio.paused){
+    profileAudio.play().catch(() => showToast('Não foi possível tocar (formato de áudio não suportado aqui)'));
+  } else {
+    profileAudio.pause();
+  }
+};
+profileAudio.addEventListener('play', () => { musicPlayBtn.textContent = '⏸'; musicBars.classList.remove('paused'); });
+profileAudio.addEventListener('pause', () => { musicPlayBtn.textContent = '▶'; musicBars.classList.add('paused'); });
+
+/* ===================== PERSONALIZAÇÃO: FUNDO ANIMADO ===================== */
+let selectedBgPreset = 'none';
+let bgCustomImageURL = null;
+const bgImageFileInput = document.getElementById('bgImageFileInput');
+
+document.querySelectorAll('#bgPresetGrid button[data-bg]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#bgPresetGrid button[data-bg]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedBgPreset = btn.dataset.bg;
+    bgCustomImageURL = null; // preset e imagem própria são mutuamente exclusivos
+  });
+});
+document.getElementById('pickBgImageBtn').onclick = () => bgImageFileInput.click();
+bgImageFileInput.addEventListener('change', () => {
+  const file = bgImageFileInput.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    bgCustomImageURL = reader.result;
+    selectedBgPreset = 'custom-image';
+    document.querySelectorAll('#bgPresetGrid button[data-bg]').forEach(b => b.classList.remove('active'));
+    showToast('Imagem de fundo escolhida — clique em Salvar pra aplicar');
+  };
+  reader.readAsDataURL(file);
+});
+
+function renderProfileBackground(){
+  const layer = document.getElementById('profileBgLayer');
+  layer.className = 'profile-bg-layer';
+  layer.innerHTML = '';
+  layer.style.backgroundImage = '';
+
+  if (selectedBgPreset === 'custom-image' && bgCustomImageURL){
+    layer.classList.add('bg-custom-image');
+    layer.style.backgroundImage = `url(${bgCustomImageURL})`;
+    return;
+  }
+  if (selectedBgPreset === 'bubbles'){
+    layer.classList.add('bg-bubbles');
+    for (let i = 0; i < 14; i++){
+      const b = document.createElement('span');
+      const size = 8 + Math.random() * 22;
+      b.style.width = size + 'px'; b.style.height = size + 'px';
+      b.style.left = Math.random() * 96 + '%';
+      b.style.setProperty('--bx', (Math.random() * 40 - 20) + 'px');
+      b.style.animationDuration = (6 + Math.random() * 6) + 's';
+      b.style.animationDelay = (Math.random() * 6) + 's';
+      layer.appendChild(b);
+    }
+  } else if (selectedBgPreset === 'stars'){
+    layer.classList.add('bg-stars');
+    for (let i = 0; i < 26; i++){
+      const s = document.createElement('span');
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.animationDuration = (1.5 + Math.random() * 2.5) + 's';
+      s.style.animationDelay = (Math.random() * 2) + 's';
+      layer.appendChild(s);
+    }
+  } else if (selectedBgPreset === 'wave'){
+    layer.classList.add('bg-wave');
+  } else if (selectedBgPreset === 'confetti'){
+    layer.classList.add('bg-confetti');
+    const symbols = ['🎉','✨','🎊'];
+    for (let i = 0; i < 12; i++){
+      const c = document.createElement('span');
+      c.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      c.style.left = Math.random() * 96 + '%';
+      c.style.animationDuration = (4 + Math.random() * 4) + 's';
+      c.style.animationDelay = (Math.random() * 5) + 's';
+      layer.appendChild(c);
+    }
+  }
+  // 'none' não adiciona nenhuma classe extra — fica só o painel liso
+}
+renderProfileBackground();
+
 document.getElementById('saveProfileBtn').onclick = () => {
   const name = document.getElementById('editNameInput').value.trim() || 'Você';
   const status = document.getElementById('editStatusInput').value.trim() || 'Disponível pra conversar ✨';
   document.getElementById('profileNameDisplay').textContent = name;
   document.getElementById('profileStatusDisplay').textContent = status;
+
+  // cor de destaque aplicada no anel do avatar e no id
+  document.getElementById('profileAvatarDisplay').style.setProperty('--ring-color', selectedAccentColor);
+
+  // música do perfil: arquivo próprio OU Spotify (exclusivos entre si)
+  const player = document.getElementById('musicPlayer');
+  const spotifyDisplay = document.getElementById('spotifyEmbedDisplay');
+  if (musicObjectURL){
+    profileAudio.src = musicObjectURL;
+    document.getElementById('musicTitle').textContent = musicFileName;
+    player.style.display = 'flex';
+    spotifyDisplay.style.display = 'none';
+    spotifyDisplay.innerHTML = '';
+  } else if (spotifyEmbedId){
+    spotifyDisplay.innerHTML = `<iframe src="https://open.spotify.com/embed/${spotifyEmbedType}/${spotifyEmbedId}" width="100%" height="80" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+    spotifyDisplay.style.display = 'block';
+    player.style.display = 'none';
+    profileAudio.pause();
+    profileAudio.removeAttribute('src');
+  } else {
+    player.style.display = 'none';
+    spotifyDisplay.style.display = 'none';
+    spotifyDisplay.innerHTML = '';
+    profileAudio.pause();
+    profileAudio.removeAttribute('src');
+  }
+
+  // fundo animado
+  renderProfileBackground();
+
   closeOverlay('overlay-editprofile');
   showToast('Perfil atualizado!');
 };
