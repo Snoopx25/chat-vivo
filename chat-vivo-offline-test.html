@@ -165,7 +165,7 @@
 
   /* ===================== ABA PERFIL ===================== */
   .profile-cover{
-    height:126px; position:relative; flex-shrink:0; overflow:hidden;
+    height:126px; position:relative; flex-shrink:0;
     background:linear-gradient(135deg, #FF4FA0 0%, #7A2A8C 55%, #2A1F4A 100%);
     background-size:220% 220%; animation: coverShift 9s ease-in-out infinite;
   }
@@ -198,6 +198,19 @@
     margin:9px 0 0; font-family:'Space Grotesk'; background:rgba(62,232,216,0.08);
     border:1px solid rgba(62,232,216,0.2); padding:5px 10px; border-radius:20px;
   }
+
+  .bio-section{ padding:6px 20px 4px; }
+  .profile-bio{
+    font-size:13px; line-height:1.6; color:var(--ink); white-space:pre-wrap;
+    word-wrap:break-word; margin:0;
+  }
+
+  .bio-field-wrap{ position:relative; }
+  textarea#editBioInput{ min-height:120px; resize:vertical; font-family:'Space Grotesk', sans-serif; line-height:1.5; }
+  .bio-char-count{
+    text-align:right; font-size:10.5px; color:var(--muted); margin-top:4px;
+  }
+  .bio-char-count.limit{ color:var(--danger); }
 
   .stats-row{ display:flex; gap:10px; padding:16px 20px 4px; flex-shrink:0; }
   .stat-card{
@@ -233,7 +246,7 @@
     background:var(--bg-panel); flex-shrink:0; padding:8px 8px calc(8px + env(safe-area-inset-bottom));
   }
   .nav-indicator{
-    position:absolute; top:5px; height:calc(100% - 13px); width:calc(100% / 3 - 6px);
+    position:absolute; top:5px; height:calc(100% - 13px); width:calc(100% / 4 - 6px);
     background:linear-gradient(160deg, rgba(255,79,160,0.16), rgba(255,79,160,0.03));
     border:1px solid rgba(255,79,160,0.25); border-radius:14px;
     transition: transform .32s cubic-bezier(.34,1.2,.4,1);
@@ -242,8 +255,8 @@
   .nav-btn{
     flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
     background:none; border:none; color:var(--muted); padding:8px 0; cursor:pointer;
-    font-family:'Fredoka', sans-serif; font-size:10px; position:relative; z-index:1;
-    transition: color .25s ease, transform .2s ease;
+    font-family:'Fredoka', sans-serif; font-size:9.5px; position:relative; z-index:1;
+    transition: color .25s ease, transform .2s ease; white-space:nowrap;
   }
   .nav-btn svg{ transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
   .nav-btn:active{ transform:scale(.92); }
@@ -717,13 +730,14 @@
 
   /* --- camada de fundo animado, atrás do conteúdo da aba Perfil --- */
   .profile-bg-layer{
-    position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:-1;
+    position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0;
     background-size:cover; background-position:center;
   }
+  .profile-fg{ position:relative; z-index:1; }
 
   .profile-bg-layer.bg-bubbles span{
     position:absolute; bottom:-30px; border-radius:50%;
-    background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), rgba(255,255,255,0.02));
+    background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4), rgba(255,255,255,0.05));
     animation:bgBubbleUp linear infinite;
   }
   @keyframes bgBubbleUp{
@@ -732,12 +746,13 @@
     100%{ transform:translateY(-620px) translateX(var(--bx,20px)); opacity:0; }
   }
   .profile-bg-layer.bg-stars span{
-    position:absolute; width:2px; height:2px; background:#fff; border-radius:50%;
+    position:absolute; width:2.5px; height:2.5px; background:#fff; border-radius:50%;
+    box-shadow:0 0 4px 1px rgba(255,255,255,0.6);
     animation:bgStarTwinkle ease-in-out infinite;
   }
-  @keyframes bgStarTwinkle{ 0%,100%{ opacity:.15; } 50%{ opacity:.9; } }
+  @keyframes bgStarTwinkle{ 0%,100%{ opacity:.25; } 50%{ opacity:1; } }
   .profile-bg-layer.bg-wave{
-    background:linear-gradient(120deg, rgba(255,79,160,0.10), rgba(62,232,216,0.10), rgba(198,255,62,0.08));
+    background:linear-gradient(120deg, rgba(255,79,160,0.22), rgba(62,232,216,0.22), rgba(198,255,62,0.16));
     background-size:220% 220%; animation:bgWaveShift 8s ease-in-out infinite;
   }
   @keyframes bgWaveShift{ 0%,100%{ background-position:0% 40%; } 50%{ background-position:100% 60%; } }
@@ -774,6 +789,60 @@
   .music-bars span:nth-child(4){ height:85%; animation-delay:.45s; }
   .music-bars.paused span{ animation-play-state:paused; opacity:.2; }
   @keyframes musicBarBounce{ 0%,100%{ transform:scaleY(.4); } 50%{ transform:scaleY(1); } }
+  /* ===================== MODO CRIADOR ===================== */
+  .creator-badge{ font-size:16px; margin-left:4px; vertical-align:middle; }
+
+  .creator-tools-card{
+    margin:14px 20px 4px; padding:14px; border-radius:16px;
+    background:linear-gradient(160deg, rgba(255,79,160,0.1), rgba(198,255,62,0.04));
+    border:1px solid rgba(255,79,160,0.22);
+  }
+  .creator-stats-row{ display:flex; gap:10px; }
+  .creator-actions{ display:flex; flex-direction:column; gap:8px; }
+  .public-link-pill{
+    display:flex; align-items:center; gap:8px; background:var(--field);
+    border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:8px 10px;
+  }
+  .public-link-pill span{ flex:1; font-size:11.5px; color:var(--neon-cyan); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .public-link-pill button{
+    background:var(--neon-lime); color:#12210a; border:none; padding:5px 10px;
+    border-radius:8px; font-family:'Fredoka', sans-serif; font-size:10.5px; font-weight:600; cursor:pointer;
+  }
+
+  /* --- fundos exclusivos e trava visual --- */
+  .bg-swatch-galaxy{ background:radial-gradient(circle at 30% 40%, rgba(185,140,255,0.7), transparent 60%), radial-gradient(circle at 70% 60%, rgba(62,232,216,0.5), transparent 60%), #0d0820; }
+  .bg-swatch-neon{ background:linear-gradient(135deg, #FF4FA0, #3EE8D8); }
+  .bg-preset-grid button.locked{ opacity:.45; position:relative; }
+  .bg-preset-grid button.locked.unlocked{ opacity:1; }
+
+  .profile-bg-layer.bg-galaxy{
+    background:radial-gradient(circle at 20% 30%, rgba(185,140,255,0.18), transparent 55%),
+               radial-gradient(circle at 80% 70%, rgba(62,232,216,0.14), transparent 55%), #0d0820;
+  }
+  .profile-bg-layer.bg-galaxy span{
+    position:absolute; width:2px; height:2px; background:#fff; border-radius:50%;
+    box-shadow:0 0 6px 1px rgba(185,140,255,0.7);
+    animation:bgStarTwinkle ease-in-out infinite;
+  }
+  .profile-bg-layer.bg-neon{
+    background:linear-gradient(120deg, rgba(255,79,160,0.28), rgba(62,232,216,0.28));
+    background-size:260% 260%; animation:bgNeonPulse 5s ease-in-out infinite;
+  }
+  @keyframes bgNeonPulse{
+    0%,100%{ background-position:0% 30%; filter:brightness(1); }
+    50%{ background-position:100% 70%; filter:brightness(1.25); }
+  }
+
+  /* --- meu canal --- */
+  .channel-body{ flex:1; overflow-y:auto; padding:16px 0; }
+  .channel-composer{ padding:0 20px 14px; border-bottom:1px solid rgba(255,255,255,0.06); margin-bottom:8px; }
+  .channel-feed{ padding:0 20px; display:flex; flex-direction:column; gap:10px; }
+  .channel-post{
+    background:var(--field); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:12px 14px;
+  }
+  .channel-post-time{ font-size:10px; color:var(--muted); margin:0 0 4px; }
+  .channel-post-text{ font-size:13px; color:var(--ink); margin:0; white-space:pre-wrap; }
+  .channel-empty{ text-align:center; color:var(--muted); font-size:12px; padding:30px 20px; }
 </style>
 </head>
 <body>
@@ -867,40 +936,88 @@
     <div class="scroll-area" style="padding-bottom:20px; position:relative;">
       <div class="profile-bg-layer" id="profileBgLayer"></div>
 
-      <div class="profile-cover" id="profileCoverDisplay">
-        <div class="profile-avatar-wrap">
-          <div class="avatar ring" id="profileAvatarDisplay" style="--ring-color:var(--neon-lime); background:linear-gradient(135deg,#FF4FA0,#7A2A8C);">V</div>
-        </div>
-      </div>
-      <div class="profile-body">
-        <h2 class="profile-name" id="profileNameDisplay">Você</h2>
-        <p class="profile-status" id="profileStatusDisplay">Disponível pra conversar ✨</p>
-        <p class="profile-id">🔗 chatvivo://voce-8f3k2j</p>
-
-        <div class="music-player" id="musicPlayer" style="display:none;">
-          <button class="music-play-btn" id="musicPlayBtn" type="button">▶</button>
-          <div class="music-info">
-            <p class="music-title" id="musicTitle">—</p>
-            <div class="music-bars"><span></span><span></span><span></span><span></span></div>
+      <div class="profile-fg">
+        <div class="profile-cover" id="profileCoverDisplay">
+          <button class="cover-edit-btn" id="openEditProfile" title="Editar perfil">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          </button>
+          <div class="profile-avatar-wrap">
+            <div class="avatar ring" id="profileAvatarDisplay" style="--ring-color:var(--neon-lime); background:linear-gradient(135deg,#FF4FA0,#7A2A8C);">V</div>
           </div>
         </div>
-        <div id="spotifyEmbedDisplay" style="display:none; margin-top:12px;"></div>
-        <audio id="profileAudio" loop></audio>
-      </div>
+        <div class="profile-body">
+          <h2 class="profile-name">
+            <span id="profileNameDisplay">Você</span>
+            <span class="creator-badge" id="creatorBadge" style="display:none;" title="Modo criador ativo">🎬</span>
+          </h2>
+          <p class="profile-status" id="profileStatusDisplay">Disponível pra conversar ✨</p>
+          <p class="profile-id">🔗 chatvivo://voce-8f3k2j</p>
 
-      <div class="stats-row">
-        <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">Contatos</div></div>
-        <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Conversas</div></div>
-        <div class="stat-card"><div class="stat-num">128</div><div class="stat-label">Reações</div></div>
-      </div>
+          <div class="music-player" id="musicPlayer" style="display:none;">
+            <button class="music-play-btn" id="musicPlayBtn" type="button">▶</button>
+            <div class="music-info">
+              <p class="music-title" id="musicTitle">—</p>
+              <div class="music-bars"><span></span><span></span><span></span><span></span></div>
+            </div>
+          </div>
+          <div id="spotifyEmbedDisplay" style="display:none; margin-top:12px;"></div>
+          <audio id="profileAudio" loop></audio>
+        </div>
 
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">Contatos</div></div>
+          <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Conversas</div></div>
+          <div class="stat-card"><div class="stat-num">128</div><div class="stat-label">Reações</div></div>
+        </div>
+
+        <div class="creator-tools-card" id="creatorToolsCard" style="display:none;">
+          <p class="settings-section-label" style="margin-top:0;">🎬 Ferramentas de criador</p>
+          <div class="creator-stats-row">
+            <div class="stat-card"><div class="stat-num" id="creatorFollowers">42</div><div class="stat-label">Seguidores</div></div>
+            <div class="stat-card"><div class="stat-num" id="creatorViews">187</div><div class="stat-label">Visitas ao perfil</div></div>
+          </div>
+          <div class="creator-actions">
+            <button type="button" class="btn-ghost" id="openChannelBtn" style="margin-top:8px;">📢 Meu Canal</button>
+            <div class="public-link-pill">
+              <span id="publicLinkText">chatvivo.app/@voce</span>
+              <button type="button" id="copyPublicLinkBtn">Copiar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bio-section">
+          <p class="settings-section-label" style="margin-top:8px;">Sobre</p>
+          <p class="profile-bio" id="profileBioDisplay">Ainda não escrevi nada sobre mim. Toca no lápis lá em cima pra personalizar seu perfil — foto, capa, música, fundo animado e um textão de até 2000 caracteres, do jeito que você quiser 🎨</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ABA: CONFIGURAÇÕES ===== -->
+  <div class="tab-screen" id="tab-config">
+    <div class="tab-head"><h1>Configurações</h1></div>
+    <div class="scroll-area">
       <div class="menu-list">
-        <p class="menu-section-label">Conta</p>
-        <div class="menu-item" id="openEditProfile">
+        <p class="menu-section-label">Perfil</p>
+        <div class="menu-item" id="openEditProfileFromConfig">
           <div class="menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
           <span class="menu-label">Editar perfil</span>
           <span class="menu-chevron">›</span>
         </div>
+
+        <p class="menu-section-label">Criador</p>
+        <div class="toggle-row" style="padding:12px 20px;">
+          <div class="toggle-row-text">
+            <p class="toggle-row-title">🎬 Modo criador de conteúdo</p>
+            <p class="toggle-row-sub">Desbloqueia canal, estatísticas, link público e fundos exclusivos</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="creatorModeToggle">
+            <span class="switch-track"></span>
+          </label>
+        </div>
+
+        <p class="menu-section-label">Conta</p>
         <div class="menu-item" id="openDataSync">
           <div class="menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.9A7 7 0 1 1 15.7 8h1.3a4 4 0 0 1 0 8H6a3 3 0 0 1-2-5.1"/></svg></div>
           <span class="menu-label">Dados e sincronização</span>
@@ -916,6 +1033,19 @@
           <span class="menu-label">Privacidade e conta</span>
           <span class="menu-chevron">›</span>
         </div>
+
+        <p class="menu-section-label">Suporte</p>
+        <div class="menu-item" id="openHelp">
+          <div class="menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><path d="M12 17h.01"/></svg></div>
+          <span class="menu-label">Ajuda e suporte</span>
+          <span class="menu-chevron">›</span>
+        </div>
+        <div class="menu-item" id="openAbout">
+          <div class="menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+          <span class="menu-label">Sobre o Chat Vivo</span>
+          <span class="menu-chevron">›</span>
+        </div>
+
         <p class="menu-section-label">Sessão</p>
         <div class="menu-item danger" id="logoutBtn">
           <div class="menu-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg></div>
@@ -928,6 +1058,10 @@
   <!-- ===== NAV INFERIOR ===== -->
   <div class="bottom-nav">
     <div class="nav-indicator" id="navIndicator"></div>
+    <button class="nav-btn" data-tab="tab-profile">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Perfil <span class="nav-dot"></span>
+    </button>
     <button class="nav-btn active" data-tab="tab-chats">
       <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       Conversas <span class="nav-dot"></span>
@@ -936,9 +1070,9 @@
       <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Contatos <span class="nav-dot"></span>
     </button>
-    <button class="nav-btn" data-tab="tab-profile">
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Perfil <span class="nav-dot"></span>
+    <button class="nav-btn" data-tab="tab-config">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Config <span class="nav-dot"></span>
     </button>
   </div>
 
@@ -1023,6 +1157,11 @@
           <p class="field-label">Status</p>
           <textarea class="field-input" id="editStatusInput" rows="2">Disponível pra conversar ✨</textarea>
         </div>
+        <div class="field-group bio-field-wrap">
+          <p class="field-label">Sobre mim</p>
+          <textarea class="field-input" id="editBioInput" maxlength="2000" placeholder="Conte o que quiser sobre você — até 2000 caracteres, totalmente livre 🎨"></textarea>
+          <p class="bio-char-count" id="bioCharCount">0 / 2000</p>
+        </div>
 
         <p class="settings-section-label" style="margin-top:8px;">Cor de destaque</p>
         <div class="color-swatches" id="colorSwatches">
@@ -1071,7 +1210,10 @@
           <button type="button" data-bg="stars"><span class="bg-swatch bg-swatch-stars"></span>Estrelas</button>
           <button type="button" data-bg="wave"><span class="bg-swatch bg-swatch-wave"></span>Ondas</button>
           <button type="button" data-bg="confetti"><span class="bg-swatch bg-swatch-confetti"></span>Confete</button>
+          <button type="button" data-bg="galaxy" class="locked" id="bgGalaxyBtn"><span class="bg-swatch bg-swatch-galaxy"></span>Galáxia 🔒</button>
+          <button type="button" data-bg="neon" class="locked" id="bgNeonBtn"><span class="bg-swatch bg-swatch-neon"></span>Néon 🔒</button>
         </div>
+        <p class="settings-hint" id="creatorBgHint" style="margin-top:6px;">🔒 Galáxia e Néon são exclusivos do modo criador de conteúdo.</p>
         <button type="button" class="btn-ghost" id="pickBgImageBtn" style="margin-top:10px;">🖼️ Usar imagem/GIF própria de fundo</button>
         <input type="file" id="bgImageFileInput" accept="image/*,image/gif" style="display:none;">
 
@@ -1246,6 +1388,22 @@
   </div>
 
   <!-- ===== OVERLAY: CONVERSA INDIVIDUAL ===== -->
+  <!-- ===== OVERLAY: MEU CANAL (criador) ===== -->
+  <div class="overlay-screen" id="overlay-channel">
+    <div class="overlay-head">
+      <button class="icon-btn" data-close="overlay-channel">←</button>
+      <h2>Meu Canal</h2>
+    </div>
+    <div class="channel-body">
+      <p class="settings-hint" style="padding:0 20px;">Manda um recado — todo mundo que te segue recebe, mas ninguém responde nesse mesmo fio. É pra avisos, não pra bate-papo.</p>
+      <div class="channel-composer">
+        <textarea class="field-input" id="channelPostInput" rows="2" placeholder="O que você quer anunciar?"></textarea>
+        <button class="btn-primary" id="channelPostBtn" style="margin-top:8px;">Publicar no canal</button>
+      </div>
+      <div class="channel-feed" id="channelFeed"></div>
+    </div>
+  </div>
+
   <div class="overlay-screen" id="screen-chat">
     <div class="chat-header">
       <button class="icon-btn" data-close="screen-chat">←</button>
@@ -2046,10 +2204,95 @@ document.getElementById('declineFriend').onclick = () => {
 };
 
 /* --- editar perfil --- */
-document.getElementById('openEditProfile').onclick = () => openOverlay('overlay-editprofile');
+function openProfileEditor(){
+  document.getElementById('editNameInput').value = document.getElementById('profileNameDisplay').textContent;
+  document.getElementById('editStatusInput').value = document.getElementById('profileStatusDisplay').textContent;
+  const currentBio = document.getElementById('profileBioDisplay').textContent;
+  const isPlaceholder = currentBio.startsWith('Ainda não escrevi nada sobre mim');
+  editBioInput.value = isPlaceholder ? '' : currentBio;
+  bioCharCount.textContent = editBioInput.value.length + ' / 2000';
+  openOverlay('overlay-editprofile');
+}
+document.getElementById('openEditProfile').onclick = openProfileEditor;
+document.getElementById('openEditProfileFromConfig').onclick = openProfileEditor;
 document.getElementById('openDataSync').onclick = () => openOverlay('overlay-datasync');
 document.getElementById('openPrivacy').onclick = () => openOverlay('overlay-privacy');
 document.getElementById('openNotifications').onclick = () => openOverlay('overlay-notifications');
+document.getElementById('openHelp').onclick = () => showToast('Central de ajuda chega em breve — por enquanto, é só continuar testando! 🙂');
+
+/* ===================== MODO CRIADOR ===================== */
+let creatorModeOn = false;
+const channelPosts = [];
+
+function applyCreatorMode(on){
+  creatorModeOn = on;
+  document.getElementById('creatorBadge').style.display = on ? 'inline' : 'none';
+  document.getElementById('creatorToolsCard').style.display = on ? 'block' : 'none';
+
+  // desbloqueia os fundos exclusivos (Galáxia e Néon)
+  ['bgGalaxyBtn','bgNeonBtn'].forEach(id => {
+    document.getElementById(id).classList.toggle('unlocked', on);
+  });
+  document.getElementById('creatorBgHint').style.display = on ? 'none' : 'block';
+
+  showToast(on ? 'Modo criador ativado 🎬 — canal, estatísticas e fundos exclusivos liberados' : 'Modo criador desativado');
+}
+document.getElementById('creatorModeToggle').addEventListener('change', (e) => applyCreatorMode(e.target.checked));
+
+/* fundos trancados avisam em vez de aplicar, se o modo criador estiver desligado */
+['bgGalaxyBtn','bgNeonBtn'].forEach(id => {
+  document.getElementById(id).addEventListener('click', (e) => {
+    if (!creatorModeOn){
+      e.stopImmediatePropagation();
+      showToast('🔒 Ative o modo criador em Config pra usar esse fundo');
+    }
+  }, true); // captura antes do listener geral da grade de fundos
+});
+
+/* link público: copiar */
+document.getElementById('copyPublicLinkBtn').onclick = () => {
+  const text = document.getElementById('publicLinkText').textContent;
+  navigator.clipboard.writeText('https://' + text).then(() => showToast('Link copiado!'));
+};
+
+/* meu canal: publicar e listar */
+function renderChannelFeed(){
+  const feed = document.getElementById('channelFeed');
+  if (!channelPosts.length){
+    feed.innerHTML = '<p class="channel-empty">Nenhuma publicação ainda. Escreva o primeiro recado pro seu canal acima 📢</p>';
+    return;
+  }
+  feed.innerHTML = channelPosts.slice().reverse().map(p => `
+    <div class="channel-post">
+      <p class="channel-post-time">${p.time}</p>
+      <p class="channel-post-text"></p>
+    </div>
+  `).join('');
+  // texto inserido via textContent pra evitar qualquer problema de HTML não escapado
+  feed.querySelectorAll('.channel-post-text').forEach((el, i) => {
+    el.textContent = channelPosts.slice().reverse()[i].text;
+  });
+}
+document.getElementById('openChannelBtn').onclick = () => { openOverlay('overlay-channel'); renderChannelFeed(); };
+document.getElementById('channelPostBtn').onclick = () => {
+  const input = document.getElementById('channelPostInput');
+  const text = input.value.trim();
+  if (!text) return;
+  channelPosts.push({ text, time: new Date().toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }) });
+  input.value = '';
+  renderChannelFeed();
+  showToast('Publicado no seu canal!');
+};
+document.getElementById('openAbout').onclick = () => showToast('Chat Vivo · versão de teste local · feito pra conversas que reagem de verdade 💬');
+
+/* --- contador de caracteres da bio (até 2000) --- */
+const editBioInput = document.getElementById('editBioInput');
+const bioCharCount = document.getElementById('bioCharCount');
+editBioInput.addEventListener('input', () => {
+  const len = editBioInput.value.length;
+  bioCharCount.textContent = len + ' / 2000';
+  bioCharCount.classList.toggle('limit', len >= 1980);
+});
 
 /* ===================== NOTIFICAÇÕES ===================== */
 const notifState = { priorityContacts: new Set() };
@@ -2367,8 +2610,15 @@ renderProfileBackground();
 document.getElementById('saveProfileBtn').onclick = () => {
   const name = document.getElementById('editNameInput').value.trim() || 'Você';
   const status = document.getElementById('editStatusInput').value.trim() || 'Disponível pra conversar ✨';
+  const bio = editBioInput.value.trim();
   document.getElementById('profileNameDisplay').textContent = name;
   document.getElementById('profileStatusDisplay').textContent = status;
+  document.getElementById('profileBioDisplay').textContent = bio ||
+    'Ainda não escrevi nada sobre mim. Toca no lápis lá em cima pra personalizar seu perfil — foto, capa, música, fundo animado e um textão de até 2000 caracteres, do jeito que você quiser 🎨';
+
+  // link público do criador segue o nome (simplificado, minúsculo e sem espaço)
+  const slug = name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '');
+  document.getElementById('publicLinkText').textContent = 'chatvivo.app/@' + (slug || 'voce');
 
   // cor de destaque aplicada no anel do avatar e no id
   document.getElementById('profileAvatarDisplay').style.setProperty('--ring-color', selectedAccentColor);
