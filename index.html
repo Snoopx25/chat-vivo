@@ -792,6 +792,12 @@
   /* ===================== MODO CRIADOR ===================== */
   .creator-badge{ font-size:16px; margin-left:4px; vertical-align:middle; }
 
+  /* ===================== SELO DE VERIFICADO ===================== */
+  .verified-badge{ display:none; vertical-align:middle; margin-left:4px; filter:drop-shadow(0 0 3px rgba(53,99,255,.5)); }
+  .verified-badge svg{ width:18px; height:18px; display:block; }
+  @keyframes verifiedShine{ 0%,78%,100%{ transform:translateX(-6px); opacity:0; } 88%{ transform:translateX(0); opacity:1; } 96%{ transform:translateX(6px); opacity:0; } }
+  .verified-badge .v-shine{ animation:verifiedShine 5s ease-in-out infinite; }
+
   .creator-tools-card{
     margin:14px 20px 4px; padding:14px; border-radius:16px;
     background:linear-gradient(160deg, rgba(255,79,160,0.1), rgba(198,255,62,0.04));
@@ -808,6 +814,82 @@
     background:var(--neon-lime); color:#12210a; border:none; padding:5px 10px;
     border-radius:8px; font-family:'Fredoka', sans-serif; font-size:10.5px; font-weight:600; cursor:pointer;
   }
+
+  /* ===================== SELOS TEMÁTICOS ===================== */
+  .thematic-badge{
+    display:none; position:relative; vertical-align:middle; margin-left:4px;
+    width:18px; height:18px; cursor:pointer;
+  }
+  .thematic-badge .badge-icon{
+    width:100%; height:100%; display:block; border-radius:50%;
+    border:1px solid #C9CDD6; box-shadow:0 0 0 1px rgba(0,0,0,0.25) inset;
+  }
+  .thematic-badge .badge-check-wm{
+    position:absolute; right:-1px; bottom:-1px; width:8px; height:8px;
+    background:rgba(0,0,0,0.55); border-radius:50%; display:flex; align-items:center; justify-content:center;
+  }
+  .thematic-badge .badge-check-wm svg{ width:6px; height:6px; opacity:.75; }
+  .thematic-badge .badge-flash{
+    position:absolute; inset:0; border-radius:50%; background:radial-gradient(circle, #fff, transparent 70%); opacity:0; pointer-events:none;
+  }
+  .thematic-badge[data-niche="gamer"] .badge-icon{ background:linear-gradient(135deg,#7B2FFF,#00F0FF); }
+  .thematic-badge[data-niche="musico"] .badge-icon{ background:linear-gradient(135deg,#FF3D6E,#FFB84D); }
+  .thematic-badge[data-niche="blogueiro"] .badge-icon{ background:linear-gradient(135deg,#FFD84D,#FF6FD8); }
+  .thematic-badge[data-niche="atleta"] .badge-icon{ background:linear-gradient(135deg,#2EE6A6,#00B3FF); }
+  .thematic-badge[data-niche="vlogger"] .badge-icon{ background:linear-gradient(135deg,#3DDCFF,#3D6EFF); }
+  .thematic-badge[data-niche="modelo"] .badge-icon{ background:linear-gradient(135deg,#FF9BD6,#FFD24D); }
+  .thematic-badge[data-niche="maquiagem"] .badge-icon{ background:linear-gradient(135deg,#FF4FA0,#A855F7); }
+
+  /* loop contínuo (idle) por nicho */
+  @keyframes badgePulseGlow{ 0%,100%{ filter:drop-shadow(0 0 1px rgba(0,240,255,.35)); } 50%{ filter:drop-shadow(0 0 4px rgba(0,240,255,.9)); } }
+  .thematic-badge[data-niche="gamer"]{ animation:badgePulseGlow 2.2s ease-in-out infinite; }
+
+  @keyframes badgeBeatPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.12); } }
+  .thematic-badge[data-niche="musico"] .badge-icon{ animation:badgeBeatPulse 1.1s ease-in-out infinite; }
+
+  @keyframes badgeFlash{ 0%,85%,100%{ opacity:0; } 90%{ opacity:.85; } 95%{ opacity:0; } }
+  .thematic-badge[data-niche="blogueiro"] .badge-flash{ animation:badgeFlash 4.2s ease-in-out infinite; }
+
+  @keyframes badgeFlicker{ 0%,100%{ transform:scaleY(1) rotate(0deg); } 25%{ transform:scaleY(1.08) rotate(-2deg); } 50%{ transform:scaleY(.94) rotate(1deg); } 75%{ transform:scaleY(1.05) rotate(-1deg); } }
+  .thematic-badge[data-niche="atleta"] .badge-icon path.flame{ animation:badgeFlicker 1s ease-in-out infinite; transform-origin:12px 14px; }
+
+  @keyframes badgePing{ 0%{ box-shadow:0 0 0 0 rgba(61,220,255,.55); } 100%{ box-shadow:0 0 0 6px rgba(61,220,255,0); } }
+  .thematic-badge[data-niche="vlogger"] .badge-icon{ animation:badgePing 2.4s ease-out infinite; }
+
+  @keyframes badgeTwinkle{ 0%,100%{ transform:scale(1) rotate(0deg); opacity:1; } 50%{ transform:scale(1.18) rotate(10deg); opacity:.85; } }
+  .thematic-badge[data-niche="modelo"] .badge-icon path{ animation:badgeTwinkle 1.6s ease-in-out infinite; transform-origin:12px 12px; }
+
+  @keyframes badgeShimmer{ 0%,100%{ filter:drop-shadow(0 0 1px rgba(255,79,160,.4)); } 50%{ filter:drop-shadow(0 0 4px rgba(168,85,247,.9)); } }
+  .thematic-badge[data-niche="maquiagem"]{ animation:badgeShimmer 2s ease-in-out infinite; }
+
+  /* micro-reação ao toque */
+  @keyframes badgeTapBounce{ 0%{ transform:scale(1); } 40%{ transform:scale(1.3); } 100%{ transform:scale(1); } }
+  .thematic-badge.badge-tap-react .badge-icon{ animation:badgeTapBounce .4s ease-out; }
+
+  /* nicho e links de rede social — dentro do card de criador (aba Perfil) */
+  .creator-niche-label{ margin-top:14px !important; }
+  .niche-select{
+    width:100%; margin-top:6px; padding:10px 12px; border-radius:10px;
+    background:var(--field); border:1px solid rgba(255,255,255,0.08); color:var(--text);
+    font-family:'Fredoka', sans-serif; font-size:12.5px; appearance:none; -webkit-appearance:none;
+  }
+  .creator-social-links{ margin-top:14px; }
+  .social-link-row{ display:flex; align-items:center; gap:8px; margin-top:8px; }
+  .social-link-row .social-icon{
+    width:24px; height:24px; flex:0 0 24px; display:flex; align-items:center; justify-content:center;
+    border-radius:7px; background:var(--field);
+  }
+  .social-link-row .social-icon svg{ width:13px; height:13px; }
+  .social-link-input{
+    flex:1; min-width:0; padding:8px 10px; border-radius:9px; background:var(--field);
+    border:1px solid rgba(255,255,255,0.08); color:var(--text); font-family:'Fredoka', sans-serif; font-size:11.5px;
+  }
+  .social-quick-links{ display:none; gap:8px; margin:12px 0 0; flex-wrap:wrap; }
+  .social-quick-pill{
+    width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:var(--field); border:1px solid rgba(255,255,255,0.1); text-decoration:none; cursor:pointer;
+  }
+  .social-quick-pill svg{ width:15px; height:15px; }
 
   /* --- fundos exclusivos e trava visual --- */
   .bg-swatch-galaxy{ background:radial-gradient(circle at 30% 40%, rgba(185,140,255,0.7), transparent 60%), radial-gradient(circle at 70% 60%, rgba(62,232,216,0.5), transparent 60%), #0d0820; }
@@ -948,7 +1030,28 @@
         <div class="profile-body">
           <h2 class="profile-name">
             <span id="profileNameDisplay">Você</span>
-            <span class="creator-badge" id="creatorBadge" style="display:none;" title="Modo criador ativo">🎬</span>
+            <span class="verified-badge" id="verifiedBadge" title="Perfil verificado">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="vgrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#5AC8FF"/>
+                    <stop offset="1" stop-color="#3563FF"/>
+                  </linearGradient>
+                  <clipPath id="vclip"><rect x="4" y="4" width="16" height="16" rx="5"/></clipPath>
+                </defs>
+                <g fill="url(#vgrad)">
+                  <rect x="4" y="4" width="16" height="16" rx="5"/>
+                  <rect x="4" y="4" width="16" height="16" rx="5" transform="rotate(45 12 12)"/>
+                </g>
+                <path d="M8 12.4l2.6 2.6L16.2 9.2" stroke="#fff" stroke-width="2.1" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <g clip-path="url(#vclip)">
+                  <g transform="rotate(20 12 12)">
+                    <rect class="v-shine" x="-6" y="-4" width="5" height="32" fill="rgba(255,255,255,0.65)"/>
+                  </g>
+                </g>
+              </svg>
+            </span>
+            <span class="thematic-badge" id="thematicBadge" title=""></span>
           </h2>
           <p class="profile-status" id="profileStatusDisplay">Disponível pra conversar ✨</p>
           <p class="profile-id">🔗 chatvivo://voce-8f3k2j</p>
@@ -971,7 +1074,7 @@
         </div>
 
         <div class="creator-tools-card" id="creatorToolsCard" style="display:none;">
-          <p class="settings-section-label" style="margin-top:0;">🎬 Ferramentas de criador</p>
+          <p class="settings-section-label" style="margin-top:0;">Ferramentas de criador</p>
           <div class="creator-stats-row">
             <div class="stat-card"><div class="stat-num" id="creatorFollowers">42</div><div class="stat-label">Seguidores</div></div>
             <div class="stat-card"><div class="stat-num" id="creatorViews">187</div><div class="stat-label">Visitas ao perfil</div></div>
@@ -983,7 +1086,45 @@
               <button type="button" id="copyPublicLinkBtn">Copiar</button>
             </div>
           </div>
+
+          <p class="settings-section-label creator-niche-label">Seu nicho</p>
+          <select id="creatorNicheSelect" class="niche-select">
+            <option value="none">Selecionar nicho…</option>
+            <option value="gamer">Gamer / E-sports</option>
+            <option value="blogueiro">Blog / Lifestyle</option>
+            <option value="vlogger">IRL / Vlogger</option>
+            <option value="musico">Música</option>
+            <option value="atleta">Atleta</option>
+            <option value="modelo">Modelo</option>
+            <option value="maquiagem">Maquiagem</option>
+          </select>
+
+          <div class="creator-social-links">
+            <p class="settings-section-label" style="margin-top:0;">Redes sociais</p>
+            <div class="social-link-row" data-platform="instagram">
+              <span class="social-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg></span>
+              <input type="text" class="social-link-input" placeholder="@usuario no Instagram">
+            </div>
+            <div class="social-link-row" data-platform="tiktok">
+              <span class="social-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4v9.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 4c.5 2.5 2 4 4.5 4.3"/></svg></span>
+              <input type="text" class="social-link-input" placeholder="@usuario no TikTok">
+            </div>
+            <div class="social-link-row" data-platform="youtube">
+              <span class="social-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="4"/><path d="M10.5 9.8v4.4l4-2.2Z" fill="currentColor" stroke="none"/></svg></span>
+              <input type="text" class="social-link-input" placeholder="Canal no YouTube">
+            </div>
+            <div class="social-link-row" data-platform="x">
+              <span class="social-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></span>
+              <input type="text" class="social-link-input" placeholder="@usuario no X">
+            </div>
+            <div class="social-link-row" data-platform="spotify">
+              <span class="social-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M7 10.5c3-1 7-.6 9.5.9M7.5 13.5c2.5-.8 5.5-.5 7.5.7M8 16.3c2-.6 4.3-.4 5.8.5" stroke-linecap="round"/></svg></span>
+              <input type="text" class="social-link-input" placeholder="Perfil no Spotify">
+            </div>
+          </div>
         </div>
+
+        <div class="social-quick-links" id="socialQuickLinks"></div>
 
         <div class="bio-section">
           <p class="settings-section-label" style="margin-top:8px;">Sobre</p>
@@ -1008,11 +1149,24 @@
         <p class="menu-section-label">Criador</p>
         <div class="toggle-row" style="padding:12px 20px;">
           <div class="toggle-row-text">
-            <p class="toggle-row-title">🎬 Modo criador de conteúdo</p>
+            <p class="toggle-row-title">Modo criador de conteúdo</p>
             <p class="toggle-row-sub">Desbloqueia canal, estatísticas, link público e fundos exclusivos</p>
           </div>
           <label class="switch">
             <input type="checkbox" id="creatorModeToggle">
+            <span class="switch-track"></span>
+          </label>
+        </div>
+        <p class="settings-hint" style="padding:0 20px 4px;">Nicho e redes sociais ficam disponíveis no card de criador, na aba Perfil.</p>
+
+        <p class="menu-section-label">Verificação</p>
+        <div class="toggle-row" style="padding:12px 20px;">
+          <div class="toggle-row-text">
+            <p class="toggle-row-title">✅ Selo de verificado</p>
+            <p class="toggle-row-sub">Mostra o selo azul ao lado do seu nome no perfil</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="verifiedBadgeToggle">
             <span class="switch-track"></span>
           </label>
         </div>
@@ -2226,7 +2380,6 @@ const channelPosts = [];
 
 function applyCreatorMode(on){
   creatorModeOn = on;
-  document.getElementById('creatorBadge').style.display = on ? 'inline' : 'none';
   document.getElementById('creatorToolsCard').style.display = on ? 'block' : 'none';
 
   // desbloqueia os fundos exclusivos (Galáxia e Néon)
@@ -2235,9 +2388,107 @@ function applyCreatorMode(on){
   });
   document.getElementById('creatorBgHint').style.display = on ? 'none' : 'block';
 
-  showToast(on ? 'Modo criador ativado 🎬 — canal, estatísticas e fundos exclusivos liberados' : 'Modo criador desativado');
+  showToast(on ? 'Modo criador ativado — canal, estatísticas e fundos exclusivos liberados' : 'Modo criador desativado');
 }
 document.getElementById('creatorModeToggle').addEventListener('change', (e) => applyCreatorMode(e.target.checked));
+
+/* ===================== SELO DE VERIFICADO ===================== */
+function applyVerifiedBadge(on){
+  document.getElementById('verifiedBadge').style.display = on ? 'inline-block' : 'none';
+  showToast(on ? 'Selo de verificado ativado ✅' : 'Selo de verificado desativado');
+}
+document.getElementById('verifiedBadgeToggle').addEventListener('change', (e) => applyVerifiedBadge(e.target.checked));
+
+/* ===================== SELOS TEMÁTICOS ===================== */
+const THEMATIC_BADGES = {
+  gamer:      { label: 'Gamer / E-sports · Selo Arena',
+    icon: '<svg class="badge-icon" viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="8" rx="4" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M8 11.5v3M6.5 13h3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><circle cx="16" cy="12" r="1" fill="#fff"/><circle cx="14.5" cy="14" r="1" fill="#fff"/></svg>' },
+  blogueiro:  { label: 'Blog / Lifestyle · Selo Holofote',
+    icon: '<svg class="badge-icon" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="12" rx="3" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="13" r="3.2" fill="none" stroke="#fff" stroke-width="1.8"/><rect x="8" y="4.5" width="5" height="2.5" rx="1" fill="#fff"/></svg><span class="badge-flash"></span>' },
+  vlogger:    { label: 'IRL / Vlogger · Selo Transmissão',
+    icon: '<svg class="badge-icon" viewBox="0 0 24 24"><path d="M12 21s6-5.5 6-10.5a6 6 0 1 0-12 0C6 15.5 12 21 12 21Z" fill="none" stroke="#fff" stroke-width="1.7"/><circle cx="12" cy="10.5" r="2" fill="#fff"/></svg>' },
+  musico:     { label: 'Música · Selo Frequência',
+    icon: '<svg class="badge-icon" viewBox="0 0 24 24"><circle cx="8" cy="17" r="2.4" fill="#fff"/><path d="M10.2 17V6l7-2v9.2" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="17.2" cy="13.2" r="2.4" fill="#fff"/></svg>' },
+  atleta:     { label: 'Atleta · Selo Pódio',
+    icon: '<svg class="badge-icon" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3Z" fill="none" stroke="#fff" stroke-width="1.6"/><path class="flame" d="M12 9c1.5 1.5 2 3 1 4.5-.5.8-1.5 1-1.5 2 0 .6.4 1 1 1.2-1.8.3-3-1-3-2.7 0-1.3.9-2.1 1.5-3 .4-.6.6-1.2 1-2Z" fill="#fff"/></svg>' },
+  modelo:     { label: 'Modelo · Selo Sparkle',
+    icon: '<svg class="badge-icon" viewBox="0 0 24 24"><path d="M12 2c.6 3.2 1.8 5 5 5.6-3.2.6-4.4 2.4-5 5.6-.6-3.2-1.8-5-5-5.6 3.2-.6 4.4-2.4 5-5.6Z" fill="#fff"/></svg>' },
+  maquiagem:  { label: 'Maquiagem · Selo Glow',
+    icon: '<svg class="badge-icon" viewBox="0 0 24 24"><rect x="9" y="11" width="6" height="9" rx="2" fill="#fff"/><path d="M9 11c0-3 1-5 3-7 2 2 3 4 3 7H9Z" fill="#fff"/></svg>' }
+};
+const BADGE_CHECK_WM = '<span class="badge-check-wm"><svg viewBox="0 0 24 24"><path d="M5 12.5l4 4 10-10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+let activeThematicBadge = 'none';
+
+function renderThematicBadge(niche){
+  const el = document.getElementById('thematicBadge');
+  if (niche === 'none' || !THEMATIC_BADGES[niche]){
+    el.style.display = 'none';
+    el.removeAttribute('data-niche');
+    el.innerHTML = '';
+    el.title = '';
+    return;
+  }
+  const b = THEMATIC_BADGES[niche];
+  el.dataset.niche = niche;
+  el.innerHTML = b.icon + BADGE_CHECK_WM;
+  el.title = 'Verificado por Chat Vivo · ' + b.label;
+  el.style.display = 'inline-block';
+}
+
+function selectThematicBadge(niche){
+  activeThematicBadge = niche;
+  renderThematicBadge(niche);
+  showToast(niche === 'none' ? 'Selo temático removido' : 'Selo "' + THEMATIC_BADGES[niche].label.split(' · ')[1] + '" ativado 🎖️');
+}
+
+document.getElementById('creatorNicheSelect').addEventListener('change', (e) => selectThematicBadge(e.target.value));
+
+/* micro-reação ao toque no selo ativo do perfil */
+document.getElementById('thematicBadge').addEventListener('click', function(){
+  if (!this.dataset.niche) return;
+  this.classList.remove('badge-tap-react');
+  void this.offsetWidth; // reinicia a animação mesmo em toques seguidos
+  this.classList.add('badge-tap-react');
+  setTimeout(() => this.classList.remove('badge-tap-react'), 450);
+});
+
+/* ===================== REDES SOCIAIS ===================== */
+const SOCIAL_PLATFORMS = {
+  instagram: { label: 'Instagram', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg>' },
+  tiktok:    { label: 'TikTok', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4v9.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 4c.5 2.5 2 4 4.5 4.3"/></svg>' },
+  youtube:   { label: 'YouTube', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="4"/><path d="M10.5 9.8v4.4l4-2.2Z" fill="currentColor" stroke="none"/></svg>' },
+  x:         { label: 'X', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg>' },
+  spotify:   { label: 'Spotify', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M7 10.5c3-1 7-.6 9.5.9M7.5 13.5c2.5-.8 5.5-.5 7.5.7M8 16.3c2-.6 4.3-.4 5.8.5" stroke-linecap="round"/></svg>' }
+};
+const socialLinks = {};
+
+function renderSocialQuickLinks(){
+  const wrap = document.getElementById('socialQuickLinks');
+  const entries = Object.keys(SOCIAL_PLATFORMS).filter(p => socialLinks[p] && socialLinks[p].trim());
+  if (!entries.length){
+    wrap.style.display = 'none';
+    wrap.innerHTML = '';
+    return;
+  }
+  wrap.innerHTML = entries.map(p =>
+    `<a class="social-quick-pill" data-platform="${p}" title="${SOCIAL_PLATFORMS[p].label}: ${socialLinks[p]}">${SOCIAL_PLATFORMS[p].icon}</a>`
+  ).join('');
+  wrap.style.display = 'flex';
+  wrap.querySelectorAll('.social-quick-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const p = pill.dataset.platform;
+      showToast('🔗 Abriria "' + socialLinks[p] + '" no ' + SOCIAL_PLATFORMS[p].label + ' (modo de teste)');
+    });
+  });
+}
+
+document.querySelectorAll('.social-link-input').forEach(input => {
+  const platform = input.closest('.social-link-row').dataset.platform;
+  input.addEventListener('input', () => {
+    socialLinks[platform] = input.value;
+    renderSocialQuickLinks();
+  });
+});
 
 /* fundos trancados avisam em vez de aplicar, se o modo criador estiver desligado */
 ['bgGalaxyBtn','bgNeonBtn'].forEach(id => {
