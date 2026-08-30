@@ -1,0 +1,23 @@
+<svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="cvBubbleGrad2" gradientUnits="userSpaceOnUse" cx="70" cy="59" r="160">
+      <stop offset="0%" stop-color="#FF4FA0"/>
+      <stop offset="60%" stop-color="#B23A8E"/>
+      <stop offset="100%" stop-color="#5C2470"/>
+    </radialGradient>
+  </defs>
+
+  <!-- marca (ícone escalado a partir do chatvivo-icon.svg) -->
+  <g transform="translate(4,2) scale(0.372)">
+    <path d="M170,424 L230,424 L150,478 Z" fill="url(#cvBubbleGrad2)"/>
+    <rect x="40" y="40" width="432" height="384" rx="104" fill="url(#cvBubbleGrad2)"/>
+    <circle cx="194" cy="210" r="20" fill="#F2EBFF"/>
+    <circle cx="318" cy="210" r="20" fill="#F2EBFF"/>
+    <path d="M186,266 Q256,326 326,266" stroke="#F2EBFF" stroke-width="20" fill="none" stroke-linecap="round"/>
+    <circle cx="392" cy="104" r="16" fill="#C6FF3E" stroke="#150F23" stroke-width="6"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="222" y="120" font-family="Fredoka, sans-serif" font-weight="700" font-size="64" fill="#F2EBFF">chat</text>
+  <text x="222" y="176" font-family="Fredoka, sans-serif" font-weight="700" font-size="64" fill="#3EE8D8">vivo</text>
+</svg>
